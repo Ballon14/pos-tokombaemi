@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Attendance;
 use App\Models\Category;
-use App\Models\Employee;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseItem;
@@ -26,15 +24,12 @@ class DatabaseSeeder extends Seeder
         // Create Roles
         $adminRole = Role::create(['name' => 'admin']);
         $kasirRole = Role::create(['name' => 'kasir']);
-        $karyawanRole = Role::create(['name' => 'karyawan']);
-
 
         // Create Permissions
         $permissions = [
-            'manage-users', 'manage-products', 'manage-categories', 'manage-suppliers', 'manage-employees',
-            'manage-sales', 'manage-purchases', 'manage-attendance', 'manage-reports',
-            'view-pos', 'view-sales', 'view-reports', 'view-attendance',
-            'create-leave-request', 'approve-leave-request',
+            'manage-users', 'manage-products', 'manage-categories', 'manage-suppliers',
+            'manage-sales', 'manage-purchases', 'manage-reports',
+            'view-pos', 'view-sales', 'view-reports',
         ];
 
         foreach ($permissions as $perm) {
@@ -42,24 +37,15 @@ class DatabaseSeeder extends Seeder
         }
 
         $adminRole->givePermissionTo(Permission::all());
-        $kasirRole->givePermissionTo(['view-pos', 'manage-sales', 'view-sales', 'view-attendance', 'create-leave-request']);
-        $karyawanRole->givePermissionTo(['view-attendance', 'create-leave-request']);
+        $kasirRole->givePermissionTo(['view-pos', 'manage-sales', 'view-sales']);
 
-
-        // Create Users & Employees
+        // Create Users
         $admin = User::create([
             'name' => 'Administrator',
             'email' => 'admin@makmurjaya.com',
             'password' => Hash::make('password'),
         ]);
         $admin->assignRole('admin');
-        Employee::create([
-            'user_id' => $admin->id,
-            'nama' => 'Administrator',
-            'jabatan' => 'Admin',
-            'no_kontak' => '081234567890',
-            'tanggal_masuk' => '2024-01-01',
-        ]);
 
         $kasir1 = User::create([
             'name' => 'Siti Kasir',
@@ -67,13 +53,6 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $kasir1->assignRole('kasir');
-        Employee::create([
-            'user_id' => $kasir1->id,
-            'nama' => 'Siti Kasir',
-            'jabatan' => 'Kasir',
-            'no_kontak' => '081234567891',
-            'tanggal_masuk' => '2024-03-15',
-        ]);
 
         $kasir2 = User::create([
             'name' => 'Budi Kasir',
@@ -81,39 +60,6 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $kasir2->assignRole('kasir');
-        Employee::create([
-            'user_id' => $kasir2->id,
-            'nama' => 'Budi Kasir',
-            'jabatan' => 'Kasir',
-            'no_kontak' => '081234567892',
-            'tanggal_masuk' => '2024-05-01',
-        ]);
-
-        $staffUsers = [];
-        $staffNames = [
-            ['name' => 'Andi Staff', 'email' => 'staff1@makmurjaya.com'],
-            ['name' => 'Dewi Staff', 'email' => 'staff2@makmurjaya.com'],
-            ['name' => 'Rudi Staff', 'email' => 'staff3@makmurjaya.com'],
-        ];
-
-        foreach ($staffNames as $i => $staff) {
-            $user = User::create([
-                'name' => $staff['name'],
-                'email' => $staff['email'],
-                'password' => Hash::make('password'),
-            ]);
-            $user->assignRole('karyawan');
-            $emp = Employee::create([
-                'user_id' => $user->id,
-                'nama' => $staff['name'],
-                'jabatan' => 'Staff Gudang',
-                'no_kontak' => '08123456789'.($i + 3),
-                'tanggal_masuk' => '2024-0'.($i + 2).'-01',
-            ]);
-            $staffUsers[] = ['user' => $user, 'employee' => $emp];
-        }
-
-
 
         // Categories
         $categories = [
@@ -232,27 +178,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Create sample attendances (exclude admin — admin is exempt from attendance)
-        $allEmployees = Employee::whereHas('user', function ($q) {
-            $q->whereDoesntHave('roles', function ($r) {
-                $r->where('name', 'admin');
-            });
-        })->get();
-        for ($day = 5; $day >= 0; $day--) {
-            $date = Carbon::now()->subDays($day);
-            if ($date->isWeekend()) {
-                continue;
-            }
 
-            foreach ($allEmployees as $emp) {
-                Attendance::create([
-                    'employee_id' => $emp->id,
-                    'tanggal' => $date->toDateString(),
-                    'clock_in' => $date->copy()->setHour(rand(7, 9))->setMinute(rand(0, 59))->format('H:i:s'),
-                    'clock_out' => $day === 0 ? null : $date->copy()->setHour(rand(16, 18))->setMinute(rand(0, 59))->format('H:i:s'),
-                    'status' => 'hadir',
-                ]);
-            }
-        }
     }
 }

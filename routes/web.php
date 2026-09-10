@@ -22,10 +22,10 @@ Route::get('/', function () {
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified', 'ensure-attended'])
+    ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['auth', 'ensure-attended'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -36,10 +36,7 @@ Route::middleware(['auth', 'ensure-attended'])->group(function () {
         Route::resource('categories', CategoryController::class)->except('show');
         Route::post('/categories/{category}/toggle-active', [CategoryController::class, 'toggleActive'])->name('categories.toggle-active');
         Route::resource('products', ProductController::class);
-        Route::resource('shifts', App\Http\Controllers\ShiftController::class)->except('show');
         Route::resource('suppliers', SupplierController::class)->except('show');
-        Route::resource('employees', EmployeeController::class)->except('show');
-        Route::post('/employees/{employee}/toggle-active', [EmployeeController::class, 'toggleActive'])->name('employees.toggle-active');
 
         // Purchases
         Route::resource('purchases', PurchaseController::class)->only(['index', 'create', 'store', 'show']);
@@ -55,9 +52,6 @@ Route::middleware(['auth', 'ensure-attended'])->group(function () {
         Route::post('/sale-returns/{sale}', [SaleReturnController::class, 'store'])->name('sale-returns.store');
         Route::get('/sale-returns/{saleReturn}', [SaleReturnController::class, 'show'])->name('sale-returns.show');
 
-        // Attendance Admin
-        Route::get('/attendance/admin', [AttendanceController::class, 'adminIndex'])->name('attendance.admin');
-
         // Activity Logs
         Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
     });
@@ -70,20 +64,6 @@ Route::middleware(['auth', 'ensure-attended'])->group(function () {
         Route::get('/sales/{sale}/receipt', [SaleController::class, 'receipt'])->name('sales.receipt');
     });
 
-    // Attendance - All authenticated users with employee data
-    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-    Route::get('/attendance/clock', [AttendanceController::class, 'clock'])->name('attendance.clock');
-    Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clock-in');
-    Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clock-out');
-
-    // Leave Requests
-    Route::get('/leave-requests', [LeaveRequestController::class, 'index'])->name('leave-requests.index');
-    Route::get('/leave-requests/create', [LeaveRequestController::class, 'create'])->name('leave-requests.create');
-    Route::post('/leave-requests', [LeaveRequestController::class, 'store'])->name('leave-requests.store');
-    Route::post('/leave-requests/{leaveRequest}/cancel', [LeaveRequestController::class, 'cancel'])->name('leave-requests.cancel');
-    Route::post('/leave-requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve')->middleware('role:admin|manager');
-    Route::post('/leave-requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject')->middleware('role:admin|manager');
-
     // Reports - Admin & Manager & Kasir (Kasir only sees their own sales)
     Route::middleware('role:admin|manager|kasir')->prefix('reports')->group(function () {
         Route::get('/sales', [ReportController::class, 'sales'])->name('reports.sales');
@@ -92,7 +72,6 @@ Route::middleware(['auth', 'ensure-attended'])->group(function () {
     Route::middleware('role:admin|manager')->prefix('reports')->group(function () {
         Route::get('/profit-loss', [ReportController::class, 'profitLoss'])->name('reports.profit-loss');
         Route::get('/stock', [ReportController::class, 'stock'])->name('reports.stock');
-        Route::get('/attendance', [ReportController::class, 'attendance'])->name('reports.attendance');
         Route::get('/price-change', [ReportController::class, 'priceChange'])->name('reports.price-change');
         Route::post('/price-change/sync-master', [ReportController::class, 'syncMasterPrice'])->name('reports.sync-master-price');
     });
