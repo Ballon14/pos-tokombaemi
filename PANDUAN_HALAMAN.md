@@ -1,6 +1,6 @@
-# Panduan Fungsi Halaman (Toko Makmur)
+# Panduan Fungsi Halaman (Toko Mba Emi)
 
-Dokumen ini menjelaskan fungsi dari masing-masing halaman dan menu yang ada di dalam sistem Point of Sale (POS) & Manajemen Stok "Toko Makmur".
+Dokumen ini menjelaskan fungsi dari masing-masing halaman dan menu yang ada di dalam sistem Point of Sale (POS) & Manajemen Stok "Toko Mba Emi".
 
 ---
 

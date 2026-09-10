@@ -33,7 +33,7 @@
         @endif
         
         <div style="text-align: center;">
-            <div class="title" style="font-size: 22px; font-weight: bold; margin-bottom: 3px;">TOKO MAKMUR</div>
+            <div class="title" style="font-size: 22px; font-weight: bold; margin-bottom: 3px;">TOKO MBA EMI</div>
             <div class="subtitle" style="font-size: 11px; margin-bottom: 2px;">Kaliboto, Kec. Bener, Kabupaten Purworejo, Jawa Tengah, Indonesia</div>
             <div class="subtitle" style="font-size: 11px; margin-bottom: 15px;">Telp/WA: +62 821-3583-0272</div>
             

@@ -25,7 +25,7 @@
             <img src="{{ asset('logo.png') }}" style="max-height: 40px; filter: invert(1) grayscale(100%); object-fit: contain;">
         </div>
         @endif
-        <div class="logo">TOKO MAKMUR</div>
+        <div class="logo">TOKO MBA EMI</div>
         <div style="font-size: 10px;">Kaliboto, Kec. Bener, Kabupaten Purworejo, Jawa Tengah</div>
         <div style="font-size: 10px;">Telp/WA: +62 821-3583-0272</div>
     </div>

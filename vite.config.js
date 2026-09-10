@@ -13,8 +13,8 @@ export default defineConfig({
             injectRegister: 'auto',
             includeAssets: ['favicon.ico'],
             manifest: {
-                name: 'Toko Makmur',
-                short_name: 'Toko Makmur',
+                name: 'Toko Mba Emi',
+                short_name: 'Toko Mba Emi',
                 description: 'Manajemen Toko & Kasir Modern',
                 lang: 'id',
                 start_url: '/',
