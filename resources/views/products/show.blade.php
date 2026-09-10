@@ -8,7 +8,6 @@
         @endif
         <div class="space-y-3 text-sm">
             <div class="flex justify-between"><span class="text-slate-500">SKU</span><span class="font-mono font-medium text-slate-700">{{ $product->sku }}</span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Barcode</span><span class="font-mono text-slate-700">{{ $product->barcode ?? '-' }}</span></div>
             <div class="flex justify-between"><span class="text-slate-500">Kategori</span><span class="text-slate-700">{{ $product->category->name }}</span></div>
             <div class="flex justify-between"><span class="text-slate-500">Satuan</span><span class="text-slate-700">{{ $product->satuan }}</span></div>
             <hr class="border-slate-100">

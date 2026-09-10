@@ -15,7 +15,7 @@
     <form method="GET" class="flex flex-wrap gap-3 items-end">
         <div class="flex-1 min-w-[200px]">
             <label class="text-xs font-medium text-slate-500">Cari</label>
-            <input type="text" name="search" value="{{ $search }}" placeholder="Nama / SKU / Barcode" class="w-full mt-1 rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200">
+            <input type="text" name="search" value="{{ $search }}" placeholder="Nama / SKU" class="w-full mt-1 rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200">
         </div>
         <div class="w-48">
             <label class="text-xs font-medium text-slate-500">Kategori</label>

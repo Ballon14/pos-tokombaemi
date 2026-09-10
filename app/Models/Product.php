@@ -12,7 +12,6 @@ class Product extends Model
         'category_id',
         'name',
         'sku',
-        'barcode',
         'harga_beli',
         'harga_jual',
         'stok',

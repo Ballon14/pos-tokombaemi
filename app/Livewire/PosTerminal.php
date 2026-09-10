@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Product;
 use App\Services\SaleService;
-use App\Support\AttendanceGate;
+
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -29,9 +29,7 @@ class PosTerminal extends Component
 
     public ?int $lastSaleId = null;
 
-    public string $barcode = '';
 
-    public ?string $barcodeError = null;
 
     public function mount(): void
     {
@@ -62,26 +60,6 @@ class PosTerminal extends Component
         // Triggered reactively
     }
 
-    public function addByBarcode(?string $code = null): void
-    {
-        $code = trim((string) ($code ?? $this->barcode));
-        $this->barcode = '';
-
-        if ($code === '') {
-            return;
-        }
-
-        $product = $this->findByCode($code);
-
-        if (! $product) {
-            $this->barcodeError = "Barcode/SKU \"{$code}\" tidak ditemukan.";
-
-            return;
-        }
-
-        $this->barcodeError = null;
-        $this->addToCart($product->id);
-    }
 
     public function addBySearchEnter(): void
     {
@@ -105,10 +83,7 @@ class PosTerminal extends Component
     {
         return Product::where('is_active', true)
             ->whereHas('category', fn($q) => $q->where('is_active', true))
-            ->where(function ($query) use ($code) {
-                $query->where('barcode', $code)
-                    ->orWhereRaw('LOWER(sku) = ?', [mb_strtolower($code)]);
-            })
+            ->whereRaw('LOWER(sku) = ?', [mb_strtolower($code)])
             ->first();
     }
 

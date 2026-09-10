@@ -17,11 +17,6 @@
                     @error('sku') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Barcode</label>
-                    <input type="text" name="barcode" value="{{ old('barcode') }}" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200">
-                    @error('barcode') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
-                </div>
-                <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Kategori <span class="text-red-500">*</span></label>
                     <select name="category_id" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200" required>
                         <option value="">Pilih...</option>

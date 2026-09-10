@@ -220,7 +220,6 @@ return [
         'name' => 'nama',
         'email' => 'email',
         'password' => 'kata sandi',
-        'barcode' => 'barcode',
         'satuan' => 'satuan',
         'harga_beli' => 'harga beli',
         'harga_jual' => 'harga jual',

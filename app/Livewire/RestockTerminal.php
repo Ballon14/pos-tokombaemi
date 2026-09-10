@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Services\ActivityLogger;
 use App\Services\PurchaseService;
-use App\Support\AttendanceGate;
+
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -18,9 +18,7 @@ class RestockTerminal extends Component
 
     public array $cart = [];
 
-    public string $barcode = '';
 
-    public ?string $barcodeError = null;
 
     public $supplierId = '';
 
@@ -47,26 +45,6 @@ class RestockTerminal extends Component
         }
     }
 
-    public function addByBarcode(?string $code = null): void
-    {
-        $code = trim((string) ($code ?? $this->barcode));
-        $this->barcode = '';
-
-        if ($code === '') {
-            return;
-        }
-
-        $product = $this->findByCode($code);
-
-        if (! $product) {
-            $this->barcodeError = "Barcode/SKU \"{$code}\" tidak ditemukan.";
-
-            return;
-        }
-
-        $this->barcodeError = null;
-        $this->addToCart($product->id);
-    }
 
     public function addBySearchEnter(): void
     {
@@ -89,10 +67,7 @@ class RestockTerminal extends Component
     private function findByCode(string $code): ?Product
     {
         return Product::where('is_active', true)
-            ->where(function ($query) use ($code) {
-                $query->where('barcode', $code)
-                    ->orWhereRaw('LOWER(sku) = ?', [mb_strtolower($code)]);
-            })
+            ->whereRaw('LOWER(sku) = ?', [mb_strtolower($code)])
             ->first();
     }
 
