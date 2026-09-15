@@ -8,7 +8,7 @@
     <!-- Logo -->
     <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-700/50 shrink-0">
         <div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden">
-            <img src="{{ asset('logo.png') }}" alt="Logo" class="w-full h-full object-contain">
+            <img src="{{ asset('logo.png') }}?v=2" alt="Logo" class="w-full h-full object-contain">
         </div>
         <div class="flex-1">
             <h1 class="text-lg font-bold text-white tracking-tight">{{ config('app.name') }}</h1>

@@ -22,7 +22,7 @@
     <div class="center">
         @if(file_exists(public_path('logo.png')))
         <div style="margin-bottom: 5px;">
-            <img src="{{ asset('logo.png') }}" style="max-height: 40px; filter: grayscale(100%) contrast(200%); object-fit: contain;">
+            <img src="{{ asset('logo.png') }}?v=2" style="max-height: 40px; filter: grayscale(100%) contrast(200%); object-fit: contain;">
         </div>
         @endif
         <div class="logo">TOKO MBA EMI</div>
