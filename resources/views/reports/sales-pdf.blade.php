@@ -21,7 +21,7 @@
 <body>
     <div class="header" style="position: relative; padding-top: 10px; min-height: 80px;">
         @if(file_exists(public_path('logo.png')))
-            <img src="{{ public_path('logo.png') }}" alt="Logo" style="position: absolute; left: 0; top: 10px; height: 70px; width: 70px; object-fit: contain; filter: invert(1);">
+            <img src="{{ public_path('logo.png') }}" alt="Logo" style="position: absolute; left: 0; top: 10px; height: 70px; width: 70px; object-fit: contain; filter: grayscale(100%);">
         @endif
         
         <div style="text-align: center;">
