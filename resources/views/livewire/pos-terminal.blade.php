@@ -13,7 +13,7 @@
                     <h3 class="text-lg font-bold text-slate-800 mb-1">Transaksi Berhasil</h3>
                     <p class="text-sm text-slate-500 leading-relaxed">{{ session('pos-success') }}</p>
                     @if ($lastSaleId)
-                        <a href="{{ route('sales.receipt', $lastSaleId) }}" target="_blank"
+                        <a href="{{ route('sales.receipt', $lastSaleId) }}"
                             class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-900 underline">Cetak
                             Struk →</a>
                     @endif
