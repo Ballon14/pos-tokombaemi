@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Services\ActivityLogger;
 use App\Services\PurchaseService;
+use App\Support\AttendanceGate;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;

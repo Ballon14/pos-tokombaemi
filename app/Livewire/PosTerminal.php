@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Product;
 use App\Services\SaleService;
+use App\Support\AttendanceGate;
 
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;

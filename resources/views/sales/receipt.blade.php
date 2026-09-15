@@ -26,8 +26,8 @@
         </div>
         @endif
         <div class="logo">TOKO MBA EMI</div>
-        <div style="font-size: 10px;">Jrakah, Kecamatan Bayan, Purworejo</div>
-        <div style="font-size: 10px;">Telp/WA: +62 852-2824-8031</div>
+        <div style="font-size: 10px;">Jrakah, Bayan, Purworejo</div>
+        <div style="font-size: 10px;">Telp/WA: 0852 2824 8031</div>
     </div>
     <div class="double-line"></div>
     <table>
