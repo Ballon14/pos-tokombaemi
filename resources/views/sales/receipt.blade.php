@@ -62,8 +62,10 @@
     <div class="center" style="font-size: 10px; margin-top: 10px;">
         Terima kasih atas kunjungan Anda!<br>
         Barang yang sudah dibeli<br>
-        tidak dapat ditukar/dikembalikan
+        tidak dapat ditukar/dikembalikan<br>
+        Syarat & ketentuan berlaku
     </div>
+    <div class="double-line"></div>
     <div class="no-print center" style="margin-top: 20px;">
         <button onclick="window.print()" style="padding: 10px 30px; font-size: 14px; background: #4f46e5; color: white; border: none; border-radius: 8px; cursor: pointer;"><i class="fa-solid fa-print"></i> Print Struk</button>
         <button onclick="window.close()" style="padding: 10px 30px; font-size: 14px; background: #6b7280; color: white; border: none; border-radius: 8px; cursor: pointer; margin-left: 10px;">Tutup</button>
