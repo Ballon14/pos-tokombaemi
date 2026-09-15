@@ -15,7 +15,7 @@
         table { width: 100%; border-collapse: collapse; }
         td { padding: 2px 0; vertical-align: top; }
         .logo { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
-        @media print { body { width: 58mm; } .no-print { display: none; } }
+        @media print { body { width: 80mm; } .no-print { display: none; } }
     </style>
 </head>
 <body>
