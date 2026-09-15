@@ -40,6 +40,6 @@
     </div>
     <div class="flex gap-3">
         <a href="{{ route('sales.index') }}" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-sm font-medium">← Kembali</a>
-        <a href="{{ route('sales.receipt', $sale) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold"><i class="fa-solid fa-print"></i> Cetak Struk</a>
+        <a href="{{ route('sales.receipt', $sale) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold"><i class="fa-solid fa-print"></i> Cetak Struk</a>
     </div>
 </x-app-layout>

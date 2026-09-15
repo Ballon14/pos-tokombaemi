@@ -50,7 +50,12 @@ class SaleController extends Controller
 
         $sale->load(['items.product', 'user']);
 
-        return view('sales.receipt', compact('sale'));
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('sales.receipt', compact('sale'));
+        
+        // 80mm width = approx 226.77 pt. Set a long enough height (e.g. 800) so it doesn't break pages
+        $pdf->setPaper([0, 0, 226.77, 800], 'portrait');
+
+        return $pdf->download('Struk-'.$sale->invoice_number.'.pdf');
     }
 
     public function pos()
