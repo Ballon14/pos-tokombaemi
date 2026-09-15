@@ -27,8 +27,8 @@
         
         <div style="text-align: center;">
             <div class="title" style="font-size: 22px; font-weight: bold; margin-bottom: 3px;">TOKO MBA EMI</div>
-            <div class="subtitle" style="font-size: 11px; margin-bottom: 2px;">Kaliboto, Kec. Bener, Kabupaten Purworejo, Jawa Tengah, Indonesia</div>
-            <div class="subtitle" style="font-size: 11px; margin-bottom: 15px;">Telp/WA: +62 821-3583-0272</div>
+            <div class="subtitle" style="font-size: 11px; margin-bottom: 2px;">Jrakah, Kecamatan Bayan, Purworejo</div>
+            <div class="subtitle" style="font-size: 11px; margin-bottom: 15px;">Telp/WA: +62 852-2824-8031</div>
             
             <div class="title" style="font-size: 16px; border-top: 1px dashed #ccc; padding-top: 15px; margin-top: 10px;">LAPORAN LABA RUGI</div>
             <div class="subtitle">Periode: {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</div>

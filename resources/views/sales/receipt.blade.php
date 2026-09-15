@@ -26,8 +26,8 @@
         </div>
         @endif
         <div class="logo">TOKO MBA EMI</div>
-        <div style="font-size: 10px;">Kaliboto, Kec. Bener, Kabupaten Purworejo, Jawa Tengah</div>
-        <div style="font-size: 10px;">Telp/WA: +62 821-3583-0272</div>
+        <div style="font-size: 10px;">Jrakah, Kecamatan Bayan, Purworejo</div>
+        <div style="font-size: 10px;">Telp/WA: +62 852-2824-8031</div>
     </div>
     <div class="double-line"></div>
     <table>
