@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Product;
 use App\Services\SaleService;
-use App\Support\AttendanceGate;
 
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
@@ -348,11 +347,6 @@ class PosTerminal extends Component
     public function processPayment()
     {
         if (empty($this->cart)) {
-            return;
-        }
-        if (! AttendanceGate::isAttended(auth()->user())) {
-            session()->flash('pos-error', 'Anda wajib clock-in terlebih dahulu untuk melakukan transaksi.');
-
             return;
         }
         if ((float) $this->bayar < $this->grandTotal) {

@@ -6,7 +6,6 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Services\ActivityLogger;
 use App\Services\PurchaseService;
-use App\Support\AttendanceGate;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -146,12 +145,6 @@ class RestockTerminal extends Component
     {
         if (empty($this->cart)) {
             session()->flash('restock-error', 'Keranjang masih kosong.');
-
-            return;
-        }
-
-        if (! AttendanceGate::isAttended(auth()->user())) {
-            session()->flash('restock-error', 'Anda wajib clock-in terlebih dahulu untuk mencatat pembelian.');
 
             return;
         }
