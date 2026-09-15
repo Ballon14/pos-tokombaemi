@@ -274,7 +274,10 @@ class RestockTerminal extends Component
             $query->where(function ($q) {
                 $q->where('name', 'like', '%'.$this->search.'%')
                     ->orWhere('sku', 'like', '%'.$this->search.'%')
-                    ->orWhere('barcode', $this->search);
+                    ->orWhere('barcode', $this->search)
+                    ->orWhereHas('category', function ($q2) {
+                        $q2->where('name', 'like', '%'.$this->search.'%');
+                    });
             });
         }
 
