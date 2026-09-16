@@ -3,10 +3,25 @@
 <x-slot name="header">
     <div class="flex items-center justify-between flex-wrap gap-3">
         <h2 class="text-2xl font-bold text-slate-800">Produk</h2>
-        <a href="{{ route('products.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl text-sm font-semibold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-            Tambah Produk
-        </a>
+        <div class="flex items-center gap-2">
+            <!-- Export Button -->
+            <a href="{{ route('products.export') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-emerald-600 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" class="hidden"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                Export Excel
+            </a>
+            
+            <!-- Import Button (triggers modal) -->
+            <button type="button" x-data="" @click="$dispatch('open-modal', 'import-product')" class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-amber-600 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+                Import
+            </button>
+
+            <!-- Add Button -->
+            <a href="{{ route('products.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl text-sm font-semibold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                Tambah Produk
+            </a>
+        </div>
     </div>
 </x-slot>
 
@@ -133,4 +148,42 @@
     </div>
     <div class="px-4 py-3 border-t border-slate-100">{{ $products->appends(request()->query())->links() }}</div>
 </div>
+
+<!-- Import Modal -->
+<div x-data="{ open: false }" @open-modal.window="if ($event.detail === 'import-product') open = true">
+    <!-- Backdrop -->
+    <div x-show="open" style="display: none;" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50" x-transition.opacity></div>
+
+    <!-- Modal Panel -->
+    <div x-show="open" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95">
+        
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden relative" @click.away="open = false">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <h3 class="text-base font-bold text-slate-800">Import Produk</h3>
+                <button @click="open = false" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data" class="p-5">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">File Excel/CSV</label>
+                    <input type="file" name="file" accept=".xlsx,.csv" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors">
+                    <p class="text-xs text-slate-500 mt-2">Pastikan format file sesuai dengan template. Anda dapat mengunduh data saat ini sebagai referensi.</p>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" @click="open = false" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">Batal</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">Import Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 </x-app-layout>

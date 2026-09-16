@@ -35,6 +35,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::resource('categories', CategoryController::class)->except('show');
         Route::post('/categories/{category}/toggle-active', [CategoryController::class, 'toggleActive'])->name('categories.toggle-active');
+        Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
+        Route::post('/products/import', [ProductController::class, 'import'])->name('products.import');
         Route::resource('products', ProductController::class);
         Route::get('/products/generate-sku/{category}', [ProductController::class, 'generateSku'])->name('products.generate-sku');
         Route::resource('suppliers', SupplierController::class)->except('show');

@@ -91,4 +91,23 @@ class ProductController extends Controller
 
         return response()->json(['sku' => $sku]);
     }
+
+    public function export(\App\Services\ProductExportService $exportService)
+    {
+        app(ActivityLogger::class)->log('product.export', 'Mengekspor data produk ke Excel.');
+        $exportService->exportToBrowser('data_produk_' . date('Ymd_His') . '.xlsx');
+    }
+
+    public function import(\App\Http\Requests\ImportProductRequest $request, \App\Services\ProductImportService $importService)
+    {
+        try {
+            $result = $importService->import($request->file('file'));
+            
+            app(ActivityLogger::class)->log('product.import', "Mengimpor data produk (Baru: {$result['imported']}, Update: {$result['updated']}, Gagal: {$result['failed']}).");
+            
+            return redirect()->route('products.index')->with('success', "Berhasil import produk. Baru: {$result['imported']}, Diupdate: {$result['updated']}, Gagal: {$result['failed']}.");
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')->with('error', $e->getMessage());
+        }
+    }
 }

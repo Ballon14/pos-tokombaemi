@@ -100,7 +100,7 @@
 
 {{-- Charts - Single Card with Divider --}}
 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
-    <div class="flex flex-col lg:flex-row lg:h-[380px]">
+    <div class="flex flex-col lg:flex-row lg:h-[320px]">
         {{-- Left: Sales Chart --}}
         <div class="flex-1 flex flex-col min-w-0">
             <div class="p-4 sm:p-5 border-b border-slate-100 shrink-0">
