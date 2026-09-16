@@ -21,6 +21,18 @@
         'settings.restore-csv' => 'bg-amber-100 text-amber-700',
         'product.import' => 'bg-indigo-100 text-indigo-700',
         'product.export' => 'bg-indigo-100 text-indigo-700',
+        'product.create' => 'bg-emerald-100 text-emerald-700',
+        'product.update' => 'bg-blue-100 text-blue-700',
+        'product.delete' => 'bg-red-100 text-red-700',
+        'category.create' => 'bg-emerald-100 text-emerald-700',
+        'category.update' => 'bg-blue-100 text-blue-700',
+        'category.delete' => 'bg-red-100 text-red-700',
+        'category.toggle_active' => 'bg-amber-100 text-amber-700',
+        'supplier.create' => 'bg-emerald-100 text-emerald-700',
+        'supplier.update' => 'bg-blue-100 text-blue-700',
+        'supplier.delete' => 'bg-red-100 text-red-700',
+        'profile.update' => 'bg-slate-100 text-slate-700',
+        'password.update' => 'bg-slate-100 text-slate-700',
     ];
     $label = [
         'auth.login' => 'Login',
@@ -40,6 +52,18 @@
         'settings.restore-csv' => 'Restore CSV',
         'product.import' => 'Import Produk',
         'product.export' => 'Export Produk',
+        'product.create' => 'Tambah Produk',
+        'product.update' => 'Edit Produk',
+        'product.delete' => 'Hapus Produk',
+        'category.create' => 'Tambah Kategori',
+        'category.update' => 'Edit Kategori',
+        'category.delete' => 'Hapus Kategori',
+        'category.toggle_active' => 'Status Kategori',
+        'supplier.create' => 'Tambah Supplier',
+        'supplier.update' => 'Edit Supplier',
+        'supplier.delete' => 'Hapus Supplier',
+        'profile.update' => 'Update Profil',
+        'password.update' => 'Update Password',
     ];
 @endphp
 
