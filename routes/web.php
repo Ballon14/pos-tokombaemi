@@ -61,7 +61,9 @@ Route::middleware(['auth'])->group(function () {
         // Settings (Backup & Restore)
         Route::get('/settings', [\App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
         Route::get('/settings/backup', [\App\Http\Controllers\SettingController::class, 'backup'])->name('settings.backup');
+        Route::get('/settings/backup-csv', [\App\Http\Controllers\SettingController::class, 'backupCsv'])->name('settings.backup-csv');
         Route::post('/settings/restore', [\App\Http\Controllers\SettingController::class, 'restore'])->name('settings.restore');
+        Route::post('/settings/restore-csv', [\App\Http\Controllers\SettingController::class, 'restoreCsv'])->name('settings.restore-csv');
     });
 
     // POS - Admin & Kasir

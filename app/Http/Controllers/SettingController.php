@@ -68,4 +68,42 @@ class SettingController extends Controller
             return redirect()->route('settings.index')->with('error', 'Gagal memulihkan database: ' . $e->getMessage());
         }
     }
+
+    public function backupCsv(\App\Services\DatabaseCsvService $csvService)
+    {
+        try {
+            $filename = 'backup_tokombaemi_csv_' . date('Ymd_His') . '.zip';
+            $path = storage_path('app/' . $filename);
+
+            $csvService->exportToZip($path);
+
+            app(ActivityLogger::class)->log('settings.backup-csv', 'Melakukan backup seluruh database ke format CSV (ZIP).');
+
+            return response()->download($path)->deleteFileAfterSend(true);
+        } catch (Exception $e) {
+            return redirect()->route('settings.index')->with('error', 'Gagal membackup database ke CSV: ' . $e->getMessage());
+        }
+    }
+
+    public function restoreCsv(Request $request, \App\Services\DatabaseCsvService $csvService)
+    {
+        $request->validate([
+            'backup_zip' => 'required|file|mimes:zip|max:51200', // 50MB max
+        ], [
+            'backup_zip.required' => 'File backup CSV (.zip) harus diunggah.',
+            'backup_zip.mimes' => 'File harus berupa arsip .zip',
+        ]);
+
+        try {
+            $file = $request->file('backup_zip');
+            
+            $csvService->restoreFromZip($file->getRealPath());
+
+            app(ActivityLogger::class)->log('settings.restore-csv', 'Melakukan restore seluruh database dari CSV (ZIP).');
+
+            return redirect()->route('settings.index')->with('success', 'Database berhasil dipulihkan dari CSV.');
+        } catch (Exception $e) {
+            return redirect()->route('settings.index')->with('error', 'Gagal memulihkan database dari CSV: ' . $e->getMessage());
+        }
+    }
 }

@@ -25,12 +25,18 @@
         </div>
         <div class="p-6">
             <p class="text-sm text-slate-600 mb-6">
-                Fitur ini akan mengekspor seluruh tabel di dalam sistem (Produk, Penjualan, Absensi, Pengguna, dll) menjadi satu file SQL. Simpan file ini di tempat yang aman sebagai cadangan data Anda.
+                Fitur ini akan mengekspor seluruh tabel di dalam sistem (Produk, Penjualan, Absensi, Pengguna, dll) menjadi satu file SQL atau ZIP berisi CSV. Simpan file ini di tempat yang aman sebagai cadangan data Anda.
             </p>
-            <a href="{{ route('settings.backup') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-emerald-600 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                Download Backup (.sql)
-            </a>
+            <div class="flex flex-wrap gap-3">
+                <a href="{{ route('settings.backup') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-emerald-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Backup (.sql)
+                </a>
+                <a href="{{ route('settings.backup-csv') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-500 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-teal-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Backup CSV (.zip)
+                </a>
+            </div>
         </div>
     </div>
 
@@ -43,7 +49,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-slate-800">Restore Database</h3>
-                    <p class="text-sm text-slate-500 mt-0.5">Pulihkan data dari file .sql</p>
+                    <p class="text-sm text-slate-500 mt-0.5">Pulihkan data dari file .sql atau .zip</p>
                 </div>
             </div>
         </div>
@@ -57,20 +63,45 @@
                 </div>
             </div>
 
-            <form action="{{ route('settings.restore') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirmForm(this, 'PERINGATAN: Semua data saat ini akan dihapus dan ditimpa! Lanjutkan restore?')">
-                @csrf
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Upload File Backup (.sql)</label>
-                    <input type="file" name="backup_file" accept=".sql" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 transition-colors">
-                    @error('backup_file')
-                        <p class="text-xs text-red-500 mt-2">{{ $message }}</p>
-                    @enderror
+            <!-- Tabs for Restore -->
+            <div x-data="{ tab: 'sql' }">
+                <div class="flex border-b border-slate-200 mb-4">
+                    <button @click="tab = 'sql'" :class="tab === 'sql' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'" class="py-2 px-4 border-b-2 font-medium text-sm transition-colors">Restore .sql</button>
+                    <button @click="tab = 'csv'" :class="tab === 'csv' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'" class="py-2 px-4 border-b-2 font-medium text-sm transition-colors">Restore .zip (CSV)</button>
                 </div>
-                <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-500 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-red-600 transition-colors w-full justify-center sm:w-auto">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                    Jalankan Restore
-                </button>
-            </form>
+
+                <!-- Form SQL -->
+                <form x-show="tab === 'sql'" action="{{ route('settings.restore') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirmForm(this, 'PERINGATAN: Semua data saat ini akan dihapus dan ditimpa dengan data SQL! Lanjutkan?')">
+                    @csrf
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Upload File Backup (.sql)</label>
+                        <input type="file" name="backup_file" accept=".sql" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 transition-colors">
+                        @error('backup_file')
+                            <p class="text-xs text-red-500 mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-500 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-red-600 transition-colors w-full justify-center sm:w-auto">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Jalankan Restore (.sql)
+                    </button>
+                </form>
+
+                <!-- Form CSV -->
+                <form x-show="tab === 'csv'" style="display: none;" action="{{ route('settings.restore-csv') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirmForm(this, 'PERINGATAN: Semua data saat ini akan dihapus dan ditimpa dengan data CSV! Lanjutkan?')">
+                    @csrf
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Upload File Backup CSV (.zip)</label>
+                        <input type="file" name="backup_zip" accept=".zip" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 transition-colors">
+                        @error('backup_zip')
+                            <p class="text-xs text-red-500 mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-amber-600 transition-colors w-full justify-center sm:w-auto">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Jalankan Restore (.zip)
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
