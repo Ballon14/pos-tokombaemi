@@ -57,6 +57,11 @@ Route::middleware(['auth'])->group(function () {
 
         // Activity Logs
         Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+
+        // Settings (Backup & Restore)
+        Route::get('/settings', [\App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
+        Route::get('/settings/backup', [\App\Http\Controllers\SettingController::class, 'backup'])->name('settings.backup');
+        Route::post('/settings/restore', [\App\Http\Controllers\SettingController::class, 'restore'])->name('settings.restore');
     });
 
     // POS - Admin & Kasir
