@@ -44,6 +44,8 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 | 📊 **Dashboard Analitik** | Grafik penjualan 7 hari, produk terlaris, ringkasan harian/bulanan, peringatan stok menipis. |
 | 🔔 **Peringatan Stok Menipis** | Notifikasi otomatis saat stok mencapai batas minimum — di dashboard, sidebar, dan halaman khusus. |
 | 🔒 **HTTPS di Jaringan LAN** | Reverse proxy nginx + sertifikat self-signed (CA internal) — PWA & offline cache aktif penuh. |
+| 🗄️ **Backup & Restore** | Backup & restore seluruh database dalam format SQL atau ZIP (CSV) langsung dari pengaturan. |
+| 📥 **Import/Export Data** | Tambah dan perbarui produk secara massal menggunakan file Excel/CSV. |
 | 💾 **Backup Otomatis** | Dump database terjadwal tiap pukul 02.30 dengan retensi 14 hari. |
 | 📱 **Aplikasi Android** | APK tersedia untuk diunduh langsung dari website (login & dashboard) — CA internal sudah tertanam, tanpa instal manual. |
 
@@ -71,6 +73,7 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 ### 📦 Manajemen Inventaris
 
 - Master data lengkap: **Kategori, Produk, Supplier** (produk: harga beli/jual, SKU, barcode, satuan, foto, batas stok)
+- **Import & Export Produk** secara massal menggunakan format Excel/CSV
 - **Mutasi stok** tercatat lengkap (stok masuk, keluar, retur, penyesuaian) dengan riwayat per produk
 - **Perhitungan COGS (Harga Pokok Penjualan)** secara otomatis per transaksi (snapshot harga beli) untuk laporan laba-rugi yang akurat
 - **Peringatan stok menipis** otomatis saat stok ≤ batas minimum (dapat diatur per produk)
@@ -98,7 +101,7 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 - **Throttling** pada login & lupa-password (anti brute-force)
 - Halaman web **anti-cache** (PreventStaleCache) agar data selalu segar
 - **PWA installable** — aplikasi dapat dipasang di layar utama perangkat kasir
-- **Backup database otomatis** via systemd timer (retensi 14 hari)
+- **Backup & Restore Database** mandiri (SQL/CSV) via pengaturan sistem, selain **Backup otomatis** via systemd timer (retensi 14 hari)
 
 ---
 
@@ -294,7 +297,10 @@ Aplikasi web dibungkus menjadi APK dengan **Capacitor** (WebView native). APK bi
 
 ## 🗺️ Roadmap
 
-- [ ] Ekspor laporan ke **Excel** (OpenSpout — sudah terpasang, siap diintegrasikan)
+- [x] Import/Ekspor data Produk (Excel/CSV)
+- [x] Backup & Restore seluruh Database (SQL & CSV) via antarmuka web
+- [ ] Ekspor semua Laporan ke **Excel** (OpenSpout — sudah terpasang)
+- [ ] Lupa Password (Breeze) dengan SMTP Email
 - [ ] Cetak struk otomatis saat transaksi selesai (auto-print)
 - [ ] Continuous Integration (GitHub Actions) & Larastan
 - [ ] Pencetakan ulang struk transaksi lama
