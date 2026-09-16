@@ -106,7 +106,8 @@ class DatabaseCsvService
         $columns = DB::getSchemaBuilder()->getColumnListing($table);
         $writer->addRow(Row::fromValues($columns));
 
-        DB::table($table)->orderBy(first($columns) ?? 'id')->chunk(500, function ($rows) use ($writer) {
+        $orderByColumn = !empty($columns) ? $columns[0] : 'id';
+        DB::table($table)->orderBy($orderByColumn)->chunk(500, function ($rows) use ($writer) {
             foreach ($rows as $row) {
                 $writer->addRow(Row::fromValues(array_values((array)$row)));
             }
