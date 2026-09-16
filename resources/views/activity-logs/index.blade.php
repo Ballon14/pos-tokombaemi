@@ -15,6 +15,12 @@
         'leave.create' => 'bg-purple-100 text-purple-700',
         'leave.approve' => 'bg-emerald-100 text-emerald-700',
         'leave.reject' => 'bg-red-100 text-red-700',
+        'settings.backup' => 'bg-emerald-100 text-emerald-700',
+        'settings.backup-csv' => 'bg-teal-100 text-teal-700',
+        'settings.restore' => 'bg-red-100 text-red-700',
+        'settings.restore-csv' => 'bg-amber-100 text-amber-700',
+        'product.import' => 'bg-indigo-100 text-indigo-700',
+        'product.export' => 'bg-indigo-100 text-indigo-700',
     ];
     $label = [
         'auth.login' => 'Login',
@@ -28,6 +34,12 @@
         'leave.create' => 'Izin/Cuti',
         'leave.approve' => 'Izin Disetujui',
         'leave.reject' => 'Izin Ditolak',
+        'settings.backup' => 'Backup SQL',
+        'settings.backup-csv' => 'Backup CSV',
+        'settings.restore' => 'Restore SQL',
+        'settings.restore-csv' => 'Restore CSV',
+        'product.import' => 'Import Produk',
+        'product.export' => 'Export Produk',
     ];
 @endphp
 
