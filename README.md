@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛒 StockKu
+# 🛒 Toko Mba Emi
 
 ### Sistem Kasir (POS) & Manajemen Toko Ritel Modern
 
@@ -41,13 +41,13 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 | 🧾 **Kasir tanpa reload** | Transaksi penuh dari Livewire — tambah barang, ubah qty, diskon, bayar, selesai. Halaman tidak pernah di-refresh. |
 | 📴 **Mode Offline** | Transaksi tersimpan di perangkat saat internet mati, **sinkron otomatis** saat koneksi pulih (IndexedDB + Service Worker). |
 | 🖨️ **Struk Thermal 58/80mm** | Template struk yang dioptimalkan untuk printer kasir thermal. |
-| 📊 **Dashboard Analitik** | Grafik penjualan 7 hari, produk terlaris, ringkasan harian/bulanan, peringatan stok menipis. |
+| 📊 **Dashboard Analitik** | Grafik penjualan harian/bulanan, produk terlaris, ringkasan transaksi, serta peringatan stok menipis. |
 | 🔔 **Peringatan Stok Menipis** | Notifikasi otomatis saat stok mencapai batas minimum — di dashboard, sidebar, dan halaman khusus. |
 | 🔒 **HTTPS di Jaringan LAN** | Reverse proxy nginx + sertifikat self-signed (CA internal) — PWA & offline cache aktif penuh. |
-| 🗄️ **Backup & Restore** | Backup & restore seluruh database dalam format SQL atau ZIP (CSV) langsung dari pengaturan. |
-| 📥 **Import/Export Data** | Tambah dan perbarui produk secara massal menggunakan file Excel/CSV. |
-| 💾 **Backup Otomatis** | Dump database terjadwal tiap pukul 02.30 dengan retensi 14 hari. |
-| 📱 **Aplikasi Android** | APK tersedia untuk diunduh langsung dari website (login & dashboard) — CA internal sudah tertanam, tanpa instal manual. |
+| 🗄️ **Backup & Restore** | Backup & restore seluruh database dalam format SQL atau ZIP (CSV) langsung dari pengaturan sistem. |
+| 📥 **Import/Export Data** | Tambah dan perbarui data produk secara massal menggunakan file Excel/CSV. |
+| 💾 **Backup Otomatis** | Dump database terjadwal via systemd tiap pukul 02.30 dengan retensi 14 hari. |
+| 📱 **Aplikasi Android** | APK tersedia untuk diunduh langsung dari website — CA internal sudah tertanam, tanpa instal manual. |
 
 ---
 
@@ -92,7 +92,7 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 
 ### 🔐 Keamanan & Operasional
 
-- Pendaftaran publik **dinonaktifkan** — akun dibuat oleh Admin
+- Pendaftaran publik **dinonaktifkan** — akun dibuat langsung melalui Seeder/Database
 - **Throttling** pada login & lupa-password (anti brute-force)
 - Halaman web **anti-cache** (PreventStaleCache) agar data selalu segar
 - **PWA installable** — aplikasi dapat dipasang di layar utama perangkat kasir
@@ -117,7 +117,7 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 | **Database** | MySQL 8+ |
 | **Frontend** | Blade · Tailwind CSS 3 · Alpine.js · Vite · Chart.js |
 | **Autentikasi & Otorisasi** | Laravel Breeze · Spatie Laravel Permission |
-| **Ekspor Dokumen** | Barryvdh/Laravel-DomPDF |
+| **Ekspor Dokumen** | Barryvdh/Laravel-DomPDF (PDF) · OpenSpout (CSV/Excel) |
 | **Offline & PWA** | IndexedDB · LocalStorage · Workbox (Service Worker) |
 | **Operasional** | Nginx (reverse proxy + HTTPS) · systemd (service & backup timer) |
 
@@ -125,12 +125,12 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 
 ## 👤 Akun Demo
 
-Seeder menyediakan data awal lengkap (kategori, produk, supplier, karyawan, dan riwayat transaksi 1 bulan). Akun yang dapat digunakan:
+Seeder menyediakan data awal lengkap (kategori, produk, supplier, dan riwayat transaksi 1 bulan). Akun yang dapat digunakan:
 
 | Role | Email | Password | Hak Akses Utama |
 |------|-------|----------|-----------------|
-| 🛡️ **Admin** | `admin@stockku.com` | `password` | Akses penuh: semua modul, master data, laporan, pengaturan |
-| 💵 **Kasir** | `kasir1@stockku.com` | `password` | Modul POS (transaksi penjualan) |
+| 🛡️ **Admin** | `admin@tokombaemi.com` | `password` | Akses penuh: semua modul, master data, laporan, pengaturan |
+| 💵 **Kasir** | `kasir1@tokombaemi.com` | `password` | Modul POS (transaksi penjualan) |
 
 ---
 
@@ -199,15 +199,16 @@ vendor/bin/pint
 ```
 app/
 ├── Http/
-│   ├── Controllers/     # Controller per modul (Penjualan, Absensi, Laporan, ...)
+│   ├── Controllers/     # Controller per modul (Penjualan, Stok, Laporan, Pengaturan, ...)
 │   ├── Middleware/      # Termasuk PreventStaleCache (anti-cache halaman web)
 │   └── Requests/        # Form Request Validation
 ├── Livewire/
 │   └── PosTerminal.php  # Komponen kasir (online + offline)
-├── Services/            # Business logic layer agar controller ramping
-│   ├── ReportService.php    # Dashboard & seluruh laporan (penjualan, laba-rugi, stok, absensi)
-│   ├── StockService.php     # Mutasi stok & peringatan stok menipis
-│   └── SaleService.php      # Transaksi, COGS, retur, PDF
+├── Services/            # Business logic layer
+│   ├── ReportService.php    # Logika dashboard & seluruh laporan
+│   ├── StockService.php     # Logika mutasi stok
+│   ├── DatabaseCsvService.php # Layanan kompresi ZIP untuk Export/Import DB
+│   └── SaleService.php      # Logika transaksi, retur, dan struk
 └── Models/              # Eloquent Models
 resources/
 ├── views/               # Blade + Tailwind + Alpine
@@ -215,7 +216,7 @@ resources/
     ├── pwa/             # offlinePos.js (POS offline) & offline.js (antrian sinkron)
     └── confirm.js       # Modal konfirmasi kustom global
 deploy/                  # systemd unit, timer backup, konfigurasi nginx
-scripts/backup.sh        # Backup database (gzip, retensi 14 hari)
+scripts/backup.sh        # Backup database otomatis
 routes/web.php           # Definisi route
 ```
 
@@ -223,45 +224,32 @@ routes/web.php           # Definisi route
 
 ## 🌐 Deploy ke Produksi
 
-> Setup di bawah sudah **diterapkan dan berjalan** di server produksi (systemd + nginx + HTTPS + backup terjadwal).
+> Setup di bawah sudah **diterapkan dan berjalan** di server produksi.
 
 ### 1. Jalankan sebagai Service (systemd)
 
 ```bash
-sudo cp deploy/stockku.service deploy/stockku-backup.service deploy/stockku-backup.timer /etc/systemd/system/
+sudo cp deploy/tokombaemi.service deploy/tokombaemi-backup.service deploy/tokombaemi-backup.timer /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now stockku.service stockku-backup.timer
+sudo systemctl enable --now tokombaemi.service tokombaemi-backup.timer
 ```
-
-- `stockku.service` — menjalankan server, **restart otomatis** jika crash, aktif saat boot.
-- `stockku-backup.timer` + `stockku-backup.service` — **backup database otomatis tiap pukul 02.30**.
 
 ### 2. HTTPS di Jaringan LAN (Nginx + CA Internal)
 
 Aplikasi berjalan di belakang **nginx** sebagai reverse proxy dengan sertifikat **self-signed** (CA internal) — port HTTP dialihkan ke HTTPS (443) secara otomatis.
 
 ```bash
-# Sertifikat & CA (CN = IP server, mis. 10.10.10.21)
-mkdir -p /etc/ssl/stockku
-openssl genrsa -out /etc/ssl/stockku/ca.key 2048
+# Sertifikat & CA (CN = IP server)
+mkdir -p /etc/ssl/tokombaemi
+openssl genrsa -out /etc/ssl/tokombaemi/ca.key 2048
 openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 \
-  -subj "/CN=StockKu CA/O=StockKu/C=ID" -out /etc/ssl/stockku/stockku-ca.crt
-# buat server.key + server.crt dengan SAN berisi IP server (lihat deploy/stockku-nginx.conf)
-
-# Konfigurasi nginx
-cp deploy/stockku-nginx.conf /etc/nginx/sites-available/stockku
-ln -sf /etc/nginx/sites-available/stockku /etc/nginx/sites-enabled/stockku
-nginx -t && systemctl restart nginx
+  -subj "/CN=Toko Mba Emi CA/O=Toko Mba Emi/C=ID" -out /etc/ssl/tokombaemi/tokombaemi-ca.crt
 ```
 
 **Mempercayai CA di perangkat klien** (PC kasir, HP):
-
-1. Salin `stockku-ca.crt` ke perangkat.
-2. **Windows**: buka `stockku-ca.crt` → *Install Certificate* → *Local Machine* → *Trusted Root Certification Authorities*.
-3. **Android**: Pengaturan → Keamanan → Instal sertifikat CA → pilih `stockku-ca.crt`.
-4. **iOS**: instal profil `stockku-ca.crt`, lalu aktifkan *Certificate Trust Settings* → *Enable Full Trust*.
-
-> Tanpa mempercayai CA, browser tetap bisa dipaksa lanjut (peringatan "Not Secure"), tetapi **PWA / service worker tidak aktif**. Sertifikat berlaku 825 hari; regenerasi dengan langkah yang sama.
+1. Salin `tokombaemi-ca.crt` ke perangkat.
+2. **Windows**: Instal ke *Trusted Root Certification Authorities*.
+3. **Android**: Pengaturan → Keamanan → Instal sertifikat CA.
 
 ### 3. Backup Database
 
@@ -269,20 +257,15 @@ nginx -t && systemctl restart nginx
 ./scripts/backup.sh   # kapan saja secara manual
 ```
 
-Dump disimpan di `storage/backups/stock-<timestamp>.sql.gz` dan file lebih dari 14 hari dihapus otomatis. Kredensial DB dibaca dari `.env` (tidak di-hardcode).
+Dump disimpan di `storage/backups/tokombaemi-<timestamp>.sql.gz` dan file lebih dari 14 hari dihapus otomatis.
 
 ### 4. Aplikasi Android (APK)
 
-Aplikasi web dibungkus menjadi APK dengan **Capacitor** (WebView native). APK bisa diunduh langsung dari website — kartu unduhan muncul di halaman login dan dashboard — sehingga tidak perlu menyalin file secara manual.
-
-- **CA internal sudah tertanam** di dalam APK (networkSecurityConfig) — WebView langsung mempercayai sertifikat self-signed tanpa instal CA di perangkat.
-- **Build ulang** setelah ada perubahan kode web:
+Aplikasi web dibungkus menjadi APK dengan **Capacitor** (WebView native). APK bisa diunduh langsung dari website — CA internal sudah tertanam di dalam APK sehingga tidak perlu instal sertifikat manual di HP kasir.
 
 ```bash
-./scripts/build-apk.sh   # membangun APK & menyalin ke public/downloads/stockku.apk
+./scripts/build-apk.sh   # membangun APK & menyalin ke public/downloads/tokombaemi.apk
 ```
-
-- Konfigurasi: `capacitor.config.json` (appId `com.stockku.app`, server `https://10.10.10.21`).
 
 ---
 
@@ -300,6 +283,6 @@ Aplikasi web dibungkus menjadi APK dengan **Capacitor** (WebView native). APK bi
 
 <div align="center">
 
-**StockKu** — dibangun dengan ❤️ untuk efisiensi bisnis Anda.
+**Toko Mba Emi** — dibangun dengan ❤️ untuk efisiensi bisnis Anda.
 
 </div>
