@@ -98,54 +98,77 @@
     </div>
 </div>
 
-{{-- Sales Chart - Full Width --}}
-<div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
-    <div class="p-4 sm:p-5 border-b border-slate-100">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-                <h3 class="text-base font-bold text-slate-800">📊 Grafik Penjualan</h3>
-                <p class="text-xs text-slate-500 mt-1">Total: <span id="sales-chart-total" class="font-bold text-emerald-600">-</span> · Rata-rata: <span id="sales-chart-average" class="font-bold text-slate-700">-</span></p>
+{{-- Charts Row - Side by Side --}}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+    {{-- Sales Chart (2/3) --}}
+    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+        <div class="p-4 sm:p-5 border-b border-slate-100">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800">Grafik Penjualan</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Total: <span id="sales-chart-total" class="font-bold text-emerald-600">-</span> · Rata-rata: <span id="sales-chart-average" class="font-bold text-slate-700">-</span></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1" id="sales-chart-tabs">
+                    <button type="button" data-period="7d" class="sales-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all">7 Hari</button>
+                    <button type="button" data-period="30d" class="sales-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all">30 Hari</button>
+                    <button type="button" data-period="12m" class="sales-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all">Bulanan</button>
+                </div>
             </div>
-            <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1" id="sales-chart-tabs">
-                <button type="button" data-period="7d" class="sales-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all">7 Hari</button>
-                <button type="button" data-period="30d" class="sales-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all">30 Hari</button>
-                <button type="button" data-period="12m" class="sales-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all">Bulanan</button>
+        </div>
+        <div class="p-4 sm:p-5 flex-1 min-h-0">
+            <div class="relative h-64 sm:h-80">
+                <canvas id="daily-sales-chart"></canvas>
             </div>
         </div>
     </div>
-    <div class="p-4 sm:p-5">
-        <div class="relative h-56 sm:h-72">
-            <canvas id="daily-sales-chart"></canvas>
-        </div>
-    </div>
-</div>
 
-{{-- Top Products --}}
-<div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
-    <div class="p-4 sm:p-5 border-b border-slate-100">
-        <h3 class="text-base font-bold text-slate-800">🏆 Produk Terlaris</h3>
-        <p class="text-xs text-slate-500 mt-0.5">Bulan {{ now()->translatedFormat('F Y') }}</p>
-    </div>
-    <div class="p-4 sm:p-5">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    {{-- Top Products (1/3) --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+        <div class="p-4 sm:p-5 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-800">Produk Terlaris</h3>
+                    <p class="text-xs text-slate-500">{{ now()->translatedFormat('F Y') }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col flex-1 min-h-0">
             {{-- Donut Chart --}}
-            <div class="relative h-52 sm:h-64">
-                <canvas id="top-products-chart"></canvas>
+            <div class="px-4 sm:px-5 pt-4 sm:pt-5">
+                <div class="relative h-44">
+                    <canvas id="top-products-chart"></canvas>
+                </div>
             </div>
             {{-- Ranked List --}}
-            <div class="space-y-3">
+            <div class="p-4 sm:p-5 flex-1 overflow-y-auto space-y-1">
+                @php $maxQty = $data['top_products']->max('total_qty') ?: 1; @endphp
                 @forelse($data['top_products'] as $i => $item)
-                <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors">
-                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0 {{ $i === 0 ? 'bg-indigo-500' : ($i === 1 ? 'bg-purple-500' : ($i === 2 ? 'bg-amber-500' : ($i === 3 ? 'bg-emerald-500' : 'bg-sky-500'))) }}">{{ $i + 1 }}</span>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-slate-700 truncate">{{ $item->product?->name ?? 'Produk dihapus' }}</p>
-                        <p class="text-xs text-slate-400">Rp {{ number_format($item->total_sales, 0, ',', '.') }}</p>
+                <div class="group relative p-2.5 rounded-xl hover:bg-slate-50/80 transition-colors">
+                    <div class="flex items-center gap-2.5 relative z-10">
+                        <span class="w-6 h-6 rounded-md flex items-center justify-center text-white text-[10px] font-bold shrink-0 {{ $i === 0 ? 'bg-indigo-500' : ($i === 1 ? 'bg-purple-500' : ($i === 2 ? 'bg-amber-500' : ($i === 3 ? 'bg-emerald-500' : 'bg-sky-500'))) }}">{{ $i + 1 }}</span>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-semibold text-slate-700 truncate">{{ $item->product?->name ?? 'Produk dihapus' }}</p>
+                            <p class="text-[10px] text-slate-400">Rp {{ number_format($item->total_sales, 0, ',', '.') }}</p>
+                        </div>
+                        <span class="text-xs font-bold text-slate-700 shrink-0">{{ $item->total_qty }}</span>
                     </div>
-                    <span class="text-sm font-bold text-slate-800 shrink-0">{{ $item->total_qty }} <span class="text-xs font-normal text-slate-400">pcs</span></span>
+                    {{-- Progress bar --}}
+                    <div class="mt-1.5 h-1 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all {{ $i === 0 ? 'bg-indigo-400' : ($i === 1 ? 'bg-purple-400' : ($i === 2 ? 'bg-amber-400' : ($i === 3 ? 'bg-emerald-400' : 'bg-sky-400'))) }}" style="width: {{ round(($item->total_qty / $maxQty) * 100) }}%"></div>
+                    </div>
                 </div>
                 @empty
-                <div class="text-center py-8">
-                    <p class="text-sm text-slate-400">Belum ada data penjualan bulan ini</p>
+                <div class="text-center py-6">
+                    <svg class="w-8 h-8 text-slate-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    <p class="text-xs text-slate-400">Belum ada data</p>
                 </div>
                 @endforelse
             </div>
