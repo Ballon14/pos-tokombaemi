@@ -4,7 +4,7 @@
 
 ### Sistem Kasir (POS) & Manajemen Toko Ritel Modern
 
-Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**, pembayaran **Tunai & QRIS**, mode **offline** yang tersinkron otomatis, dashboard **analitik real-time**, manajemen inventaris, absensi karyawan, dan laporan siap cetak.
+Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**, pembayaran **Tunai & QRIS**, mode **offline** yang tersinkron otomatis, dashboard **analitik real-time**, manajemen inventaris, audit log, dan laporan siap cetak.
 
 [![PHP](https://img.shields.io/badge/PHP-%5E8.2-777BB4?logo=php&logoColor=white)](https://www.php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)](https://laravel.com)
@@ -67,7 +67,6 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 
 - Kartu ringkasan: **Penjualan Hari Ini**, **Transaksi Hari Ini**, **Penjualan Bulan Ini**, **Produk Perlu Restock**
 - **Grafik penjualan 7 hari terakhir** (bar chart) dan **produk terlaris** (doughnut chart) dengan Chart.js
-- Ringkasan **kehadiran karyawan hari ini** (hadir / izin / sakit)
 - Daftar produk yang perlu restock dengan akses cepat ke halaman Stok Menipis
 
 ### 📦 Manajemen Inventaris
@@ -79,21 +78,17 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 - **Peringatan stok menipis** otomatis saat stok ≤ batas minimum (dapat diatur per produk)
 - **Retur penjualan** yang mengembalikan stok otomatis dan mengurangi pendapatan pada laporan
 
-### 👥 Karyawan & Absensi
+### 👥 Multi-Role & Hak Akses
 
-- **Multi-role** dengan Spatie Permission: Admin, Manager, Kasir, Karyawan
-- **Clock-In / Clock-Out** harian, rekapan harian & bulanan untuk admin
-- **Absensi wajib**: seluruh aktivitas (POS, dashboard, laporan, dll.) terkunci sampai clock-in; setelah clock-out, akses tertutup sampai hari berikutnya — kecuali sedang izin/sakit/cuti yang disetujui
-- Pengajuan **Izin / Sakit / Cuti** dengan alur **persetujuan** (approve/reject)
-- Perhitungan **persentase kehadiran** otomatis per karyawan
+- **Multi-role** terintegrasi menggunakan Spatie Permission: **Admin** dan **Kasir**
+- Antarmuka (sidebar) akan menyesuaikan menu secara dinamis berdasarkan role pengguna
 
 ### 📋 Laporan & Audit
 
-- Laporan: **Penjualan, Laba-Rugi, Mutasi Stok, Rekap Absensi** — dengan filter rentang tanggal, kasir, dan produk
+- Laporan: **Penjualan, Laba-Rugi, Mutasi Stok, Perubahan Harga** — dengan filter rentang tanggal, kasir, dan produk
 - Ekspor **PDF** (DomPDF) untuk semua laporan
 - **Pagination** pada semua halaman berdata banyak (15–31 baris/halaman)
-- **Audit log** aktivitas lengkap: login, logout, login gagal, clock-in/out, dan aktivitas penting lainnya
-- **Status akun aktif/nonaktif**: akun nonaktif tidak bisa login (sesi diputus), dikelola Admin di halaman Data Karyawan; akun Admin tidak dapat dinonaktifkan
+- **Audit log** aktivitas lengkap: login, logout, transaksi, perubahan master data, dan pengaturan sistem
 
 ### 🔐 Keamanan & Operasional
 
@@ -107,12 +102,10 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 
 ## 👥 Peran & Hak Akses
 
-| Peran | POS | Dashboard & Laporan | Master Data | Absensi | Persetujuan Cuti |
-|---|---|---|---|---|---|
-| 🛡️ **Admin** | ✅ | ✅ | ✅ (penuh) | ✅ semua karyawan | ✅ |
-| 📊 **Manager** | — | ✅ (read-only) | 👁️ lihat | 👁️ lihat | ✅ |
-| 💵 **Kasir** | ✅ (transaksi sendiri) | — | — | ✅ pribadi | — |
-|  🕒 **Karyawan** | — | — | — | ✅ pribadi | — |
+| Peran | POS | Dashboard & Laporan | Master Data | Log Aktivitas & Pengaturan |
+|---|---|---|---|---|
+| 🛡️ **Admin** | ✅ | ✅ | ✅ | ✅ |
+| 💵 **Kasir** | ✅ | — | — | — |
 
 ---
 
@@ -137,9 +130,7 @@ Seeder menyediakan data awal lengkap (kategori, produk, supplier, karyawan, dan 
 | Role | Email | Password | Hak Akses Utama |
 |------|-------|----------|-----------------|
 | 🛡️ **Admin** | `admin@stockku.com` | `password` | Akses penuh: semua modul, master data, laporan, pengaturan |
-| 📊 **Manager** | `manager@stockku.com` | `password` | Laporan & dashboard analitik (read-only, tanpa POS) |
-| 💵 **Kasir** | `kasir1@stockku.com` | `password` | Modul POS (penjualan) & absensi pribadi |
-|  🕒 **Karyawan** | `staff1@stockku.com` | `password` | Absensi harian & pengajuan izin/cuti |
+| 💵 **Kasir** | `kasir1@stockku.com` | `password` | Modul POS (transaksi penjualan) |
 
 ---
 
