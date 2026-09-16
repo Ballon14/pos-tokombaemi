@@ -33,7 +33,7 @@
             @include('layouts.sidebar')
 
             <!-- Main Content -->
-            <div class="flex-1 lg:ml-64">
+            <div class="flex-1 min-w-0 overflow-x-hidden lg:ml-64">
                 <!-- Top Navbar -->
                 @include('layouts.topbar')
 
