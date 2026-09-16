@@ -54,17 +54,17 @@
 
 <!-- Summary Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
+    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 overflow-hidden">
         <p class="text-sm font-medium text-indigo-700 mb-1">Total Transaksi Selesai</p>
-        <p class="text-3xl font-bold text-indigo-900">{{ $data['summary']['total_transactions'] }}</p>
+        <p class="text-2xl sm:text-3xl font-bold text-indigo-900 truncate">{{ $data['summary']['total_transactions'] }}</p>
     </div>
-    <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-6">
+    <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 overflow-hidden">
         <p class="text-sm font-medium text-emerald-700 mb-1">Total Pendapatan</p>
-        <p class="text-3xl font-bold text-emerald-900">Rp {{ number_format($data['summary']['total_revenue'], 0, ',', '.') }}</p>
+        <p class="text-2xl sm:text-3xl font-bold text-emerald-900 truncate" title="Rp {{ number_format($data['summary']['total_revenue'], 0, ',', '.') }}">Rp {{ number_format($data['summary']['total_revenue'], 0, ',', '.') }}</p>
     </div>
-    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
+    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 overflow-hidden">
         <p class="text-sm font-medium text-indigo-700 mb-1">Item Terjual</p>
-        <p class="text-3xl font-bold text-indigo-900">{{ $data['summary']['total_items_sold'] }}</p>
+        <p class="text-2xl sm:text-3xl font-bold text-indigo-900 truncate">{{ $data['summary']['total_items_sold'] }}</p>
     </div>
 </div>
 
@@ -100,7 +100,7 @@
             </tbody>
         </table>
     </div>
-    <div class="p-4 border-t border-slate-100">
+    <div class="p-4 border-t border-slate-100 overflow-x-auto">
         {{ $data['items']->links() }}
     </div>
 </div>
