@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ENV_FILE="/root/stockku/.env"
-BACKUP_DIR="/root/stockku/storage/backups"
+ENV_FILE="/root/tokombaemi/.env"
+BACKUP_DIR="/root/tokombaemi/storage/backups"
 KEEP_DAYS=14
-APP_DIR="/root/stockku"
+APP_DIR="/root/tokombaemi"
 
 [ -f "$ENV_FILE" ] || { echo "ERROR: $ENV_FILE not found" >&2; exit 1; }
 
@@ -18,7 +18,7 @@ DB_PASSWORD=$(grep -E '^DB_PASSWORD=' "$ENV_FILE" | cut -d= -f2- | tr -d '"')
 
 STAMP=$(date +%Y%m%d-%H%M%S)
 TMP_DIR="$BACKUP_DIR/tmp-$STAMP"
-OUT_FILE="$BACKUP_DIR/stock-$STAMP.tar.gz"
+OUT_FILE="$BACKUP_DIR/tokombaemi-$STAMP.tar.gz"
 
 mkdir -p "$TMP_DIR"
 

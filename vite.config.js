@@ -36,14 +36,14 @@ export default defineConfig({
                         urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/build/'),
                         handler: 'StaleWhileRevalidate',
                         options: {
-                            cacheName: 'stockku-assets',
+                            cacheName: 'tokombaemi-assets',
                         },
                     },
                     {
                         urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/icons/'),
                         handler: 'CacheFirst',
                         options: {
-                            cacheName: 'stockku-icons',
+                            cacheName: 'tokombaemi-icons',
                         },
                     },
                 ],

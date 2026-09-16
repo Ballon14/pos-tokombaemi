@@ -1,0 +1,14 @@
+[Unit]
+Description=tokombaemi Laravel Application Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/tokombaemi
+ExecStart=/usr/bin/php /root/tokombaemi/artisan serve --host=127.0.0.1 --port=8000
+Restart=always
+RestartSec=3
+Environment=APP_ENV=production
+
+[Install]
+WantedBy=multi-user.target

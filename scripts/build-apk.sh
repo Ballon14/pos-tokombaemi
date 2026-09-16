@@ -10,6 +10,6 @@ echo "==> Membangun APK..."
 
 echo "==> Menyalin APK ke public/downloads/..."
 mkdir -p public/downloads
-cp android/app/build/outputs/apk/debug/app-debug.apk public/downloads/stockku.apk
+cp android/app/build/outputs/apk/debug/app-debug.apk public/downloads/tokombaemi.apk
 
-echo "==> Selesai: public/downloads/stockku.apk ($(du -h public/downloads/stockku.apk | cut -f1))"
+echo "==> Selesai: public/downloads/tokombaemi.apk ($(du -h public/downloads/tokombaemi.apk | cut -f1))"

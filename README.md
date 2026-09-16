@@ -38,12 +38,11 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 
 | | |
 |---|---|
-| 🧾 **Kasir tanpa reload** | Transaksi penuh dari Livewire — tambah barang, ubah qty, diskon, bayar, selesai. Halaman tidak pernah di-refresh. |
-| 📴 **Mode Offline** | Transaksi tersimpan di perangkat saat internet mati, **sinkron otomatis** saat koneksi pulih (IndexedDB + Service Worker). |
+| 🧾 **Kasir super cepat** | Transaksi penuh dari Livewire — tambah barang, ubah qty, diskon, bayar, selesai. |
 | 🖨️ **Struk Thermal 58/80mm** | Template struk yang dioptimalkan untuk printer kasir thermal. |
 | 📊 **Dashboard Analitik** | Grafik penjualan harian/bulanan, produk terlaris, ringkasan transaksi, serta peringatan stok menipis. |
 | 🔔 **Peringatan Stok Menipis** | Notifikasi otomatis saat stok mencapai batas minimum — di dashboard, sidebar, dan halaman khusus. |
-| 🔒 **HTTPS di Jaringan LAN** | Reverse proxy nginx + sertifikat self-signed (CA internal) — PWA & offline cache aktif penuh. |
+| 🔒 **HTTPS di Jaringan LAN** | Reverse proxy nginx + sertifikat self-signed (CA internal) — PWA siap pakai. |
 | 🗄️ **Backup & Restore** | Backup & restore seluruh database dalam format SQL atau ZIP (CSV) langsung dari pengaturan sistem. |
 | 📥 **Import/Export Data** | Tambah dan perbarui data produk secara massal menggunakan file Excel/CSV. |
 | 💾 **Backup Otomatis** | Dump database terjadwal via systemd tiap pukul 02.30 dengan retensi 14 hari. |
@@ -58,7 +57,6 @@ Aplikasi kasir lengkap untuk toko ritel: transaksi **super cepat tanpa reload**,
 - **Kasir super cepat** berbasis Livewire — input lewat **klik produk, pencarian, atau scanner barcode**
 - Pembayaran **Tunai** (dengan hitung kembalian otomatis) & **QRIS statis** (tanpa payment gateway)
 - Diskon fleksibel: **nominal (Rp) atau persen (%)** — langsung dihitung ulang secara real-time
-- **Mode offline**: transaksi tersimpan di perangkat dan **sinkron otomatis** saat koneksi kembali, lengkap dengan pengecekan stok saat sinkronisasi
 - **Keranjang persisten** — isi keranjang tidak hilang walau halaman di-refresh
 - **Struk thermal 58mm/80mm** yang dioptimalkan untuk printer kasir
 - Konfirmasi transaksi dengan **modal kustom** yang konsisten (bukan dialog bawaan browser)
@@ -184,7 +182,7 @@ Buka aplikasi di browser: **http://localhost:8000**
 php artisan test
 ```
 
-Saat ini **79 test / 208 assertions** lolos, mencakup: POS (diskon Rp & %, validasi stok, pembayaran, struk), transaksi offline & sinkronisasi, retur, mutasi stok, COGS, laporan & pagination, RBAC, dan autentikasi.
+Saat ini **79 test / 208 assertions** lolos, mencakup: POS (diskon Rp & %, validasi stok, pembayaran, struk), retur, mutasi stok, COGS, laporan & pagination, RBAC, dan autentikasi.
 
 Code style dijamin konsisten dengan [Laravel Pint](https://laravel.com/docs/pint):
 
@@ -213,7 +211,6 @@ app/
 resources/
 ├── views/               # Blade + Tailwind + Alpine
 └── js/
-    ├── pwa/             # offlinePos.js (POS offline) & offline.js (antrian sinkron)
     └── confirm.js       # Modal konfirmasi kustom global
 deploy/                  # systemd unit, timer backup, konfigurasi nginx
 scripts/backup.sh        # Backup database otomatis
