@@ -18,7 +18,7 @@ class ProductRequest extends FormRequest
         return [
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'sku' => 'required|string|max:50|unique:products,sku,'.$id,
+            'sku' => 'nullable|string|max:50|unique:products,sku,'.$id,
             'harga_beli' => 'required|numeric|min:0',
             'harga_jual' => 'required|numeric|min:0',
             'stok' => $this->isMethod('post') ? 'required|integer|min:0' : 'prohibited',

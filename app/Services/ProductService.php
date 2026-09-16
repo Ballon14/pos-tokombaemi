@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductService
 {
@@ -34,6 +36,11 @@ class ProductService
     {
         if ($foto) {
             $data['foto'] = $foto->store('products', 'public');
+        }
+
+        // Auto-generate SKU if empty
+        if (empty($data['sku']) && !empty($data['category_id'])) {
+            $data['sku'] = $this->generateSku($data['category_id']);
         }
 
         return Product::create($data);
@@ -95,5 +102,46 @@ class ProductService
             })
             ->limit(10)
             ->get();
+    }
+
+    /**
+     * Generate SKU otomatis dari kategori.
+     * Format: PREFIX-0001 (3 huruf dari nama kategori + nomor urut)
+     */
+    public function generateSku(int $categoryId): string
+    {
+        $category = Category::find($categoryId);
+        if (!$category) {
+            return 'PRD-0001';
+        }
+
+        $prefix = $this->getCategoryPrefix($category->name);
+
+        // Cari nomor urut tertinggi yang sudah ada dengan prefix ini
+        $lastSku = Product::where('sku', 'like', $prefix . '-%')
+            ->orderByRaw("CAST(SUBSTRING_INDEX(sku, '-', -1) AS UNSIGNED) DESC")
+            ->value('sku');
+
+        if ($lastSku) {
+            $lastNumber = (int) substr($lastSku, strrpos($lastSku, '-') + 1);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1;
+        }
+
+        return $prefix . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Buat prefix 3 huruf dari nama kategori.
+     */
+    private function getCategoryPrefix(string $name): string
+    {
+        // Hapus karakter non-huruf, ambil 3 huruf pertama, uppercase
+        $clean = preg_replace('/[^a-zA-Z]/', '', $name);
+        $prefix = strtoupper(substr($clean, 0, 3));
+
+        // Fallback jika kurang dari 3 huruf
+        return str_pad($prefix, 3, 'X');
     }
 }

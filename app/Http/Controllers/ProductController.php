@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use App\Services\ActivityLogger;
 use App\Services\CategoryService;
@@ -82,5 +83,12 @@ class ProductController extends Controller
         app(ActivityLogger::class)->log('product.delete', 'Produk "'.$product->name.'" (SKU: '.$product->sku.') dihapus.');
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
+    }
+
+    public function generateSku(Category $category)
+    {
+        $sku = $this->productService->generateSku($category->id);
+
+        return response()->json(['sku' => $sku]);
     }
 }

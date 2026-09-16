@@ -12,19 +12,25 @@
                     @error('name') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">SKU <span class="text-red-500">*</span></label>
-                    <input type="text" name="sku" value="{{ old('sku') }}" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200" required>
-                    @error('sku') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
-                </div>
-                <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Kategori <span class="text-red-500">*</span></label>
-                    <select name="category_id" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200" required>
+                    <select name="category_id" id="category_id" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200" required>
                         <option value="">Pilih...</option>
                         @foreach($categories as $cat)
                         <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                         @endforeach
                     </select>
                     @error('category_id') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">SKU <span class="text-slate-400 text-xs font-normal">(otomatis)</span></label>
+                    <div class="relative">
+                        <input type="text" name="sku" id="sku_input" value="{{ old('sku') }}" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200 pr-10 font-mono" placeholder="Pilih kategori dulu...">
+                        <div id="sku_loading" class="absolute right-3 top-1/2 -translate-y-1/2 hidden">
+                            <svg class="w-4 h-4 animate-spin text-indigo-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                        </div>
+                    </div>
+                    @error('sku') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                    <p class="text-xs text-slate-400 mt-1">Terisi otomatis dari kategori. Bisa diedit manual.</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Satuan <span class="text-red-500">*</span></label>
@@ -65,4 +71,59 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('category_id');
+    const skuInput = document.getElementById('sku_input');
+    const skuLoading = document.getElementById('sku_loading');
+    let skuManuallyEdited = false;
+
+    // Track if user manually edits SKU
+    skuInput.addEventListener('input', function() {
+        skuManuallyEdited = true;
+    });
+
+    categorySelect.addEventListener('change', function() {
+        const categoryId = this.value;
+        if (!categoryId) {
+            if (!skuManuallyEdited) {
+                skuInput.value = '';
+                skuInput.placeholder = 'Pilih kategori dulu...';
+            }
+            return;
+        }
+
+        // Reset manual edit flag when category changes
+        skuManuallyEdited = false;
+
+        // Show loading
+        skuLoading.classList.remove('hidden');
+        skuInput.placeholder = 'Generating...';
+
+        fetch(`/products/generate-sku/${categoryId}`, {
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            skuInput.value = data.sku;
+            skuLoading.classList.add('hidden');
+        })
+        .catch(() => {
+            skuLoading.classList.add('hidden');
+            skuInput.placeholder = 'Gagal generate, isi manual';
+        });
+    });
+
+    // Auto-generate on page load if category is pre-selected (e.g. old() value)
+    if (categorySelect.value && !skuInput.value) {
+        categorySelect.dispatchEvent(new Event('change'));
+    }
+});
+</script>
+@endpush
 </x-app-layout>
