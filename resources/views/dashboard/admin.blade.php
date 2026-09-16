@@ -98,47 +98,55 @@
     </div>
 </div>
 
-{{-- Charts Row --}}
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-    {{-- Sales Chart --}}
-    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
-        <div class="p-4 sm:p-5 border-b border-slate-100">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <h3 class="text-base font-bold text-slate-800">Grafik Penjualan</h3>
-                <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1" id="sales-chart-tabs">
-                    <button type="button" data-period="7d" class="sales-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-colors">7 Hari</button>
-                    <button type="button" data-period="30d" class="sales-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors">30 Hari</button>
-                    <button type="button" data-period="12m" class="sales-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors">Bulanan</button>
-                </div>
+{{-- Sales Chart - Full Width --}}
+<div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+    <div class="p-4 sm:p-5 border-b border-slate-100">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+                <h3 class="text-base font-bold text-slate-800">📊 Grafik Penjualan</h3>
+                <p class="text-xs text-slate-500 mt-1">Total: <span id="sales-chart-total" class="font-bold text-emerald-600">-</span> · Rata-rata: <span id="sales-chart-average" class="font-bold text-slate-700">-</span></p>
             </div>
-            <p class="text-xs text-slate-500 mt-2">Total: <span id="sales-chart-total" class="font-bold text-slate-800">-</span> · Rata-rata: <span id="sales-chart-average" class="font-bold text-slate-800">-</span></p>
-        </div>
-        <div class="p-4 sm:p-5 flex-1 min-h-0">
-            <div class="relative h-64 sm:h-72">
-                <canvas id="daily-sales-chart"></canvas>
+            <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1" id="sales-chart-tabs">
+                <button type="button" data-period="7d" class="sales-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all">7 Hari</button>
+                <button type="button" data-period="30d" class="sales-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all">30 Hari</button>
+                <button type="button" data-period="12m" class="sales-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all">Bulanan</button>
             </div>
         </div>
     </div>
-
-    {{-- Top Products --}}
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
-        <div class="p-4 sm:p-5 border-b border-slate-100">
-            <h3 class="text-base font-bold text-slate-800">Produk Terlaris</h3>
-            <p class="text-xs text-slate-500 mt-0.5">Bulan {{ now()->translatedFormat('F') }}</p>
+    <div class="p-4 sm:p-5">
+        <div class="relative h-56 sm:h-72">
+            <canvas id="daily-sales-chart"></canvas>
         </div>
-        <div class="p-4 sm:p-5 flex-1 min-h-0 flex flex-col gap-4">
-            <div class="relative h-44 sm:h-48 shrink-0">
+    </div>
+</div>
+
+{{-- Top Products --}}
+<div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+    <div class="p-4 sm:p-5 border-b border-slate-100">
+        <h3 class="text-base font-bold text-slate-800">🏆 Produk Terlaris</h3>
+        <p class="text-xs text-slate-500 mt-0.5">Bulan {{ now()->translatedFormat('F Y') }}</p>
+    </div>
+    <div class="p-4 sm:p-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {{-- Donut Chart --}}
+            <div class="relative h-52 sm:h-64">
                 <canvas id="top-products-chart"></canvas>
             </div>
-            <div class="space-y-2.5 overflow-y-auto flex-1">
+            {{-- Ranked List --}}
+            <div class="space-y-3">
                 @forelse($data['top_products'] as $i => $item)
-                <div class="flex items-center gap-2.5">
-                    <span class="w-6 h-6 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0 {{ $i === 0 ? 'bg-indigo-500' : ($i === 1 ? 'bg-purple-500' : ($i === 2 ? 'bg-amber-500' : ($i === 3 ? 'bg-emerald-500' : 'bg-sky-500'))) }}">{{ $i + 1 }}</span>
-                    <p class="flex-1 min-w-0 text-xs font-medium text-slate-700 truncate">{{ $item->product?->name ?? 'Produk dihapus' }}</p>
-                    <p class="text-xs font-bold text-slate-600 shrink-0">{{ $item->total_qty }} pcs</p>
+                <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors">
+                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0 {{ $i === 0 ? 'bg-indigo-500' : ($i === 1 ? 'bg-purple-500' : ($i === 2 ? 'bg-amber-500' : ($i === 3 ? 'bg-emerald-500' : 'bg-sky-500'))) }}">{{ $i + 1 }}</span>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-slate-700 truncate">{{ $item->product?->name ?? 'Produk dihapus' }}</p>
+                        <p class="text-xs text-slate-400">Rp {{ number_format($item->total_sales, 0, ',', '.') }}</p>
+                    </div>
+                    <span class="text-sm font-bold text-slate-800 shrink-0">{{ $item->total_qty }} <span class="text-xs font-normal text-slate-400">pcs</span></span>
                 </div>
                 @empty
-                <p class="text-sm text-slate-400 text-center py-4">Belum ada data</p>
+                <div class="text-center py-8">
+                    <p class="text-sm text-slate-400">Belum ada data penjualan bulan ini</p>
+                </div>
                 @endforelse
             </div>
         </div>
