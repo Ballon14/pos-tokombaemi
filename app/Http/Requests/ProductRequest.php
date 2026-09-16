@@ -37,7 +37,6 @@ class ProductRequest extends FormRequest
             'name.required' => 'Nama produk wajib diisi.',
             'sku.required' => 'SKU wajib diisi.',
             'sku.unique' => 'SKU sudah digunakan.',
-            'barcode.unique' => 'Barcode sudah digunakan.',
             'harga_beli.required' => 'Harga beli wajib diisi.',
             'harga_jual.required' => 'Harga jual wajib diisi.',
             'foto.image' => 'File harus berupa gambar.',

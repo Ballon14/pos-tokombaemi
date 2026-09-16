@@ -20,8 +20,7 @@ class ProductService
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('sku', 'like', "%{$search}%")
-                    ->orWhere('barcode', 'like', "%{$search}%");
+                    ->orWhere('sku', 'like', "%{$search}%");
             });
         }
 
@@ -97,8 +96,7 @@ class ProductService
             ->where('stok', '>', 0)
             ->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('sku', 'like', "%{$search}%")
-                    ->orWhere('barcode', $search);
+                    ->orWhere('sku', 'like', "%{$search}%");
             })
             ->limit(10)
             ->get();
