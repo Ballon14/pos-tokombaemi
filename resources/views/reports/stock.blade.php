@@ -7,8 +7,8 @@
 </x-slot>
 
 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6">
-    <form method="GET" class="flex flex-wrap gap-3 items-end">
-        <div class="flex-1 min-w-[250px]">
+    <form method="GET" class="flex flex-col sm:flex-row flex-wrap gap-3 sm:items-end">
+        <div class="w-full sm:flex-1 sm:min-w-[250px]">
             <label class="text-xs font-medium text-slate-500">Pilih Produk</label>
             <select name="product_id" class="w-full mt-1 rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200">
                 <option value="">-- Semua Produk --</option>
@@ -17,15 +17,15 @@
                 @endforeach
             </select>
         </div>
-        <div>
+        <div class="w-full sm:w-auto">
             <label class="text-xs font-medium text-slate-500">Dari</label>
             <input type="date" name="start_date" value="{{ $startDate }}" class="w-full mt-1 rounded-xl border-slate-200 text-sm">
         </div>
-        <div>
+        <div class="w-full sm:w-auto">
             <label class="text-xs font-medium text-slate-500">Sampai</label>
             <input type="date" name="end_date" value="{{ $endDate }}" class="w-full mt-1 rounded-xl border-slate-200 text-sm">
         </div>
-        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium">Tampilkan</button>
+        <button type="submit" class="w-full sm:w-auto px-4 py-2 mt-2 sm:mt-0 bg-indigo-600 text-white rounded-xl text-sm font-medium">Tampilkan</button>
     </form>
 </div>
 
