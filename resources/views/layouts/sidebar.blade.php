@@ -4,9 +4,9 @@
 @endphp
 
 <!-- Sidebar -->
-<aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col h-full">
     <!-- Logo -->
-    <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-700/50">
+    <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-700/50 shrink-0">
         <div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden">
             <img src="{{ asset('logo.png') }}" alt="Logo" class="w-full h-full object-contain">
         </div>
@@ -19,8 +19,8 @@
         </button>
     </div>
 
-    <!-- Navigation -->
-    <nav class="mt-4 px-3 space-y-1 overflow-y-auto h-[calc(100vh-180px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <!-- Navigation (scrollable) -->
+    <nav class="flex-1 mt-4 px-3 space-y-1 overflow-y-auto min-h-0 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <!-- Dashboard -->
         <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 {{ Str::startsWith($currentRoute, 'dashboard') ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 sidebar-active' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white' }}">
             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -149,7 +149,7 @@
     </nav>
 
     <!-- User Info at Bottom -->
-    <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700/50">
+    <div class="shrink-0 p-4 border-t border-slate-700/50">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-lg flex items-center justify-center text-white text-sm font-bold">
                 {{ strtoupper(substr($user->name, 0, 1)) }}
