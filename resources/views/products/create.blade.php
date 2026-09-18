@@ -53,8 +53,9 @@
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Harga Grosir</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Harga Grosir (per satuan)</label>
                             <input type="number" name="harga_grosir" value="{{ old('harga_grosir', 0) }}" min="0" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200">
+                            <p class="text-[11px] text-slate-400 mt-1">Masukkan harga per 1 pcs/satuan, bukan total.</p>
                             @error('harga_grosir') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
