@@ -14,7 +14,21 @@ class SettingController extends Controller
 {
     public function index()
     {
-        return view('settings.index');
+        $settings = \App\Models\Setting::all()->pluck('value', 'key')->toArray();
+        return view('settings.index', compact('settings'));
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'enable_multi_tier_grosir' => 'nullable|boolean',
+        ]);
+
+        \App\Models\Setting::set('enable_multi_tier_grosir', $request->has('enable_multi_tier_grosir') ? '1' : '0');
+
+        app(ActivityLogger::class)->log('settings.update', 'Memperbarui pengaturan sistem.');
+
+        return redirect()->route('settings.index')->with('success', 'Pengaturan berhasil diperbarui.');
     }
 
     public function backup()

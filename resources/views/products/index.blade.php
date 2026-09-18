@@ -193,7 +193,13 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-slate-700 mb-1">File Excel/CSV</label>
                     <input type="file" name="file" accept=".xlsx,.csv" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors">
-                    <p class="text-xs text-slate-500 mt-2">Pastikan format file sesuai dengan template. Anda dapat mengunduh data saat ini sebagai referensi.</p>
+                    <div class="mt-3 text-xs text-slate-500 flex flex-col gap-1">
+                        <p>Pastikan format file sesuai dengan template.</p>
+                        <a href="{{ route('products.import-template') }}" class="text-indigo-600 hover:text-indigo-700 font-medium inline-flex items-center gap-1 w-max">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            Unduh Template CSV
+                        </a>
+                    </div>
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" @click="open = false" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">Batal</button>

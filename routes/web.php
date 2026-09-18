@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('categories', CategoryController::class)->except('show');
         Route::post('/categories/{category}/toggle-active', [CategoryController::class, 'toggleActive'])->name('categories.toggle-active');
         Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
+        Route::get('/products/import-template', [ProductController::class, 'downloadTemplate'])->name('products.import-template');
         Route::post('/products/import', [ProductController::class, 'import'])->name('products.import');
         Route::resource('products', ProductController::class);
         Route::get('/products/generate-sku/{category}', [ProductController::class, 'generateSku'])->name('products.generate-sku');
@@ -58,8 +59,9 @@ Route::middleware(['auth'])->group(function () {
         // Activity Logs
         Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
 
-        // Settings (Backup & Restore)
+        // Settings (Backup, Restore & Config)
         Route::get('/settings', [\App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings/update', [\App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');
         Route::get('/settings/backup', [\App\Http\Controllers\SettingController::class, 'backup'])->name('settings.backup');
         Route::get('/settings/backup-csv', [\App\Http\Controllers\SettingController::class, 'backupCsv'])->name('settings.backup-csv');
         Route::post('/settings/restore', [\App\Http\Controllers\SettingController::class, 'restore'])->name('settings.restore');

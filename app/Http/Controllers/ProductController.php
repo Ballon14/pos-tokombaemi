@@ -110,4 +110,44 @@ class ProductController extends Controller
             return redirect()->route('products.index')->with('error', $e->getMessage());
         }
     }
+
+    public function downloadTemplate()
+    {
+        $headers = [
+            'Kategori (Wajib)',
+            'SKU',
+            'Nama Produk',
+            'Harga Beli',
+            'Harga Jual',
+            'Grosir Tiers (JSON)',
+            'Stok',
+            'Min Stok',
+            'Satuan',
+            'Deskripsi',
+            'Aktif (1/0)'
+        ];
+
+        $exampleRow = [
+            'Makanan',
+            'MKN-001',
+            'Indomie Goreng',
+            '2500',
+            '3000',
+            '[{"minimal_grosir":10,"harga_grosir":2900},{"minimal_grosir":40,"harga_grosir":2800}]',
+            '100',
+            '10',
+            'pcs',
+            'Indomie goreng ori',
+            '1'
+        ];
+
+        $writer = \OpenSpout\Writer\Common\Creator\WriterEntityFactory::createCSVWriter();
+        $fileName = 'template_import_produk.csv';
+        
+        $writer->openToBrowser($fileName);
+        $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($headers));
+        $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($exampleRow));
+        $writer->close();
+        exit;
+    }
 }

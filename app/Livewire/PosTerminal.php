@@ -30,10 +30,11 @@ class PosTerminal extends Component
 
     public ?int $lastSaleId = null;
 
-
+    public bool $enableMultiTierGrosir = true;
 
     public function mount(): void
     {
+        $this->enableMultiTierGrosir = \App\Models\Setting::get('enable_multi_tier_grosir', '1') === '1';
         $this->restoreCartFromSession();
     }
 
@@ -222,6 +223,12 @@ class PosTerminal extends Component
             // Urutkan tier dari minimal_grosir tertinggi ke terendah
             usort($tiers, fn($a, $b) => $b['minimal_grosir'] <=> $a['minimal_grosir']);
             
+            if (!$this->enableMultiTierGrosir) {
+                // Jika multi-tier dimatikan, ambil tier dengan harga_grosir terendah atau minimal_grosir tertinggi
+                // Untuk simplifikasi, cukup ambil elemen pertama setelah diurutkan
+                $tiers = [$tiers[0]];
+            }
+            
             foreach ($tiers as $tier) {
                 if ($qty >= $tier['minimal_grosir'] && $tier['harga_grosir'] > 0) {
                     $item['harga'] = (float) $tier['harga_grosir'];
@@ -291,6 +298,11 @@ class PosTerminal extends Component
 
             if (count($tiers) > 0) {
                 usort($tiers, fn($a, $b) => $b['minimal_grosir'] <=> $a['minimal_grosir']);
+                
+                if (!$this->enableMultiTierGrosir) {
+                    $tiers = [$tiers[0]];
+                }
+                
                 foreach ($tiers as $tier) {
                     if ($qty >= $tier['minimal_grosir'] && $tier['harga_grosir'] > 0) {
                         $harga = (float) $tier['harga_grosir'];
