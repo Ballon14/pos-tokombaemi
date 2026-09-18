@@ -112,7 +112,9 @@
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="min-w-0">
                                         <p class="font-medium text-slate-700 truncate">{{ $item['name'] }}
-                                            @if(!empty($item['is_grosir']))
+                                            @if(!empty($item['is_grosir']) && isset($item['active_tier']))
+                                                <span class="inline-flex items-center ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">Grosir ≥{{ $item['active_tier'] }}</span>
+                                            @elseif(!empty($item['is_grosir']))
                                                 <span class="inline-flex items-center ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">Grosir</span>
                                             @endif
                                         </p>
@@ -184,7 +186,9 @@
                                     wire:key="{{ $key }}">
                                     <td class="py-3 px-4">
                                         <p class="font-medium text-slate-700">{{ $item['name'] }}
-                                            @if(!empty($item['is_grosir']))
+                                            @if(!empty($item['is_grosir']) && isset($item['active_tier']))
+                                                <span class="inline-flex items-center ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">Grosir ≥{{ $item['active_tier'] }}</span>
+                                            @elseif(!empty($item['is_grosir']))
                                                 <span class="inline-flex items-center ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">Grosir</span>
                                             @endif
                                         </p>

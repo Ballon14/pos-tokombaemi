@@ -122,9 +122,18 @@
                     <td class="py-3 px-4 text-right text-slate-600">Rp {{ number_format($product->harga_beli, 0, ',', '.') }}</td>
                     <td class="py-3 px-4 text-right font-semibold text-slate-700">Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</td>
                     <td class="py-3 px-4 text-right text-slate-600">
-                        @if($product->minimal_grosir > 0)
-                            <span class="font-semibold text-amber-700">Rp {{ number_format($product->harga_grosir, 0, ',', '.') }}</span>
-                            <span class="block text-xs text-slate-400">min. {{ $product->minimal_grosir }} {{ $product->satuan }}</span>
+                        @if(is_array($product->grosir_tiers) && count($product->grosir_tiers) > 0)
+                            <div class="space-y-1">
+                                @foreach(collect($product->grosir_tiers)->sortBy('minimal_grosir')->take(2) as $tier)
+                                    <div>
+                                        <span class="font-semibold text-amber-700 text-xs">Rp {{ number_format($tier['harga_grosir'], 0, ',', '.') }}</span>
+                                        <span class="text-[10px] text-slate-400"> (≥ {{ $tier['minimal_grosir'] }})</span>
+                                    </div>
+                                @endforeach
+                                @if(count($product->grosir_tiers) > 2)
+                                    <div class="text-[10px] text-indigo-500 font-medium">+ {{ count($product->grosir_tiers) - 2 }} level lainnya</div>
+                                @endif
+                            </div>
                         @else
                             <span class="text-slate-300">—</span>
                         @endif

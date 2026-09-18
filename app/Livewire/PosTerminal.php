@@ -108,8 +108,7 @@ class PosTerminal extends Component
                 'name' => $product->name,
                 'harga' => (float) $product->harga_jual,
                 'harga_jual_asli' => (float) $product->harga_jual,
-                'harga_grosir' => (float) $product->harga_grosir,
-                'minimal_grosir' => (int) $product->minimal_grosir,
+                'grosir_tiers' => is_array($product->grosir_tiers) ? $product->grosir_tiers : [],
                 'qty' => 1,
                 'stok' => $product->stok,
                 'diskon' => 0,
@@ -212,16 +211,26 @@ class PosTerminal extends Component
         }
 
         $item = &$this->cart[$key];
-        $minGrosir = (int) ($item['minimal_grosir'] ?? 0);
-        $hargaGrosir = (float) ($item['harga_grosir'] ?? 0);
         $hargaRetail = (float) ($item['harga_jual_asli'] ?? $item['harga']);
-
-        if ($minGrosir > 0 && $hargaGrosir > 0 && $item['qty'] >= $minGrosir) {
-            $item['harga'] = $hargaGrosir;
-            $item['is_grosir'] = true;
-        } else {
-            $item['harga'] = $hargaRetail;
-            $item['is_grosir'] = false;
+        $qty = $item['qty'];
+        $tiers = $item['grosir_tiers'] ?? [];
+        
+        $item['harga'] = $hargaRetail;
+        $item['is_grosir'] = false;
+        
+        if (is_array($tiers) && count($tiers) > 0) {
+            // Urutkan tier dari minimal_grosir tertinggi ke terendah
+            usort($tiers, fn($a, $b) => $b['minimal_grosir'] <=> $a['minimal_grosir']);
+            
+            foreach ($tiers as $tier) {
+                if ($qty >= $tier['minimal_grosir'] && $tier['harga_grosir'] > 0) {
+                    $item['harga'] = (float) $tier['harga_grosir'];
+                    $item['is_grosir'] = true;
+                    // Simpan index/info jika diperlukan untuk UI
+                    $item['active_tier'] = $tier['minimal_grosir'];
+                    break;
+                }
+            }
         }
 
         $item['subtotal'] = max(0, ($item['qty'] * $item['harga']) - $item['diskon']);
@@ -273,20 +282,32 @@ class PosTerminal extends Component
 
             $itemDiskon = max(0, (float) ($item['diskon'] ?? 0));
             $qty = min(max(1, (int) ($item['qty'] ?? 1)), $product->stok);
-            $minGrosir = (int) $product->minimal_grosir;
-            $hargaGrosir = (float) $product->harga_grosir;
             $hargaRetail = (float) $product->harga_jual;
+            $tiers = is_array($product->grosir_tiers) ? $product->grosir_tiers : [];
 
-            $isGrosir = $minGrosir > 0 && $hargaGrosir > 0 && $qty >= $minGrosir;
-            $harga = $isGrosir ? $hargaGrosir : $hargaRetail;
+            $isGrosir = false;
+            $harga = $hargaRetail;
+            $activeTier = null;
+
+            if (count($tiers) > 0) {
+                usort($tiers, fn($a, $b) => $b['minimal_grosir'] <=> $a['minimal_grosir']);
+                foreach ($tiers as $tier) {
+                    if ($qty >= $tier['minimal_grosir'] && $tier['harga_grosir'] > 0) {
+                        $harga = (float) $tier['harga_grosir'];
+                        $isGrosir = true;
+                        $activeTier = $tier['minimal_grosir'];
+                        break;
+                    }
+                }
+            }
 
             $validated[$key] = [
                 'product_id' => $product->id,
                 'name' => $product->name,
                 'harga' => $harga,
                 'harga_jual_asli' => $hargaRetail,
-                'harga_grosir' => $hargaGrosir,
-                'minimal_grosir' => $minGrosir,
+                'grosir_tiers' => $tiers,
+                'active_tier' => $activeTier,
                 'qty' => $qty,
                 'stok' => $product->stok,
                 'diskon' => $itemDiskon,
