@@ -96,6 +96,7 @@
                     <th class="text-left py-3 px-4 font-semibold text-slate-600">Kategori</th>
                     <th class="text-right py-3 px-4 font-semibold text-slate-600">Harga Beli</th>
                     <th class="text-right py-3 px-4 font-semibold text-slate-600">Harga Jual</th>
+                    <th class="text-right py-3 px-4 font-semibold text-slate-600">Harga Grosir</th>
                     <th class="text-center py-3 px-4 font-semibold text-slate-600">Stok</th>
                     <th class="text-center py-3 px-4 font-semibold text-slate-600">Aksi</th>
                 </tr>
@@ -120,6 +121,14 @@
                     <td class="py-3 px-4 text-slate-500">{{ $product->category->name }}</td>
                     <td class="py-3 px-4 text-right text-slate-600">Rp {{ number_format($product->harga_beli, 0, ',', '.') }}</td>
                     <td class="py-3 px-4 text-right font-semibold text-slate-700">Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</td>
+                    <td class="py-3 px-4 text-right text-slate-600">
+                        @if($product->minimal_grosir > 0)
+                            <span class="font-semibold text-amber-700">Rp {{ number_format($product->harga_grosir, 0, ',', '.') }}</span>
+                            <span class="block text-xs text-slate-400">min. {{ $product->minimal_grosir }} {{ $product->satuan }}</span>
+                        @else
+                            <span class="text-slate-300">—</span>
+                        @endif
+                    </td>
                     <td class="py-3 px-4 text-center">
                         <span class="px-2 py-0.5 rounded-full text-xs font-bold {{ $product->isLowStock() ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700' }}">{{ $product->stok }}</span>
                     </td>
@@ -141,7 +150,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="8" class="py-8 text-center text-slate-400">Belum ada produk.</td></tr>
+                <tr><td colspan="9" class="py-8 text-center text-slate-400">Belum ada produk.</td></tr>
                 @endforelse
             </tbody>
         </table>

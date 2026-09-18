@@ -100,17 +100,21 @@ class PosTerminal extends Component
         if (isset($this->cart[$key])) {
             if ($this->cart[$key]['qty'] < $product->stok) {
                 $this->cart[$key]['qty']++;
-                $this->cart[$key]['subtotal'] = $this->cart[$key]['qty'] * $this->cart[$key]['harga'];
+                $this->applyTieredPrice($key);
             }
         } else {
             $this->cart[$key] = [
                 'product_id' => $product->id,
                 'name' => $product->name,
                 'harga' => (float) $product->harga_jual,
+                'harga_jual_asli' => (float) $product->harga_jual,
+                'harga_grosir' => (float) $product->harga_grosir,
+                'minimal_grosir' => (int) $product->minimal_grosir,
                 'qty' => 1,
                 'stok' => $product->stok,
                 'diskon' => 0,
                 'subtotal' => (float) $product->harga_jual,
+                'is_grosir' => false,
             ];
         }
 
@@ -126,7 +130,7 @@ class PosTerminal extends Component
                 unset($this->cart[$key]);
             } elseif ($qty <= $this->cart[$key]['stok']) {
                 $this->cart[$key]['qty'] = $qty;
-                $this->cart[$key]['subtotal'] = max(0, ($qty * $this->cart[$key]['harga']) - $this->cart[$key]['diskon']);
+                $this->applyTieredPrice($key);
             }
         }
         $this->syncDiskonFromPersen();
@@ -201,6 +205,28 @@ class PosTerminal extends Component
         return (string) config('stockku.qris_code', '');
     }
 
+    private function applyTieredPrice(string $key): void
+    {
+        if (! isset($this->cart[$key])) {
+            return;
+        }
+
+        $item = &$this->cart[$key];
+        $minGrosir = (int) ($item['minimal_grosir'] ?? 0);
+        $hargaGrosir = (float) ($item['harga_grosir'] ?? 0);
+        $hargaRetail = (float) ($item['harga_jual_asli'] ?? $item['harga']);
+
+        if ($minGrosir > 0 && $hargaGrosir > 0 && $item['qty'] >= $minGrosir) {
+            $item['harga'] = $hargaGrosir;
+            $item['is_grosir'] = true;
+        } else {
+            $item['harga'] = $hargaRetail;
+            $item['is_grosir'] = false;
+        }
+
+        $item['subtotal'] = max(0, ($item['qty'] * $item['harga']) - $item['diskon']);
+    }
+
     private function syncDiskonFromPersen(): void
     {
         if ((float) $this->diskonPersen > 0) {
@@ -247,15 +273,25 @@ class PosTerminal extends Component
 
             $itemDiskon = max(0, (float) ($item['diskon'] ?? 0));
             $qty = min(max(1, (int) ($item['qty'] ?? 1)), $product->stok);
+            $minGrosir = (int) $product->minimal_grosir;
+            $hargaGrosir = (float) $product->harga_grosir;
+            $hargaRetail = (float) $product->harga_jual;
+
+            $isGrosir = $minGrosir > 0 && $hargaGrosir > 0 && $qty >= $minGrosir;
+            $harga = $isGrosir ? $hargaGrosir : $hargaRetail;
 
             $validated[$key] = [
                 'product_id' => $product->id,
                 'name' => $product->name,
-                'harga' => (float) $product->harga_jual,
+                'harga' => $harga,
+                'harga_jual_asli' => $hargaRetail,
+                'harga_grosir' => $hargaGrosir,
+                'minimal_grosir' => $minGrosir,
                 'qty' => $qty,
                 'stok' => $product->stok,
                 'diskon' => $itemDiskon,
-                'subtotal' => max(0, ($product->harga_jual * $qty) - $itemDiskon),
+                'subtotal' => max(0, ($harga * $qty) - $itemDiskon),
+                'is_grosir' => $isGrosir,
             ];
         }
 

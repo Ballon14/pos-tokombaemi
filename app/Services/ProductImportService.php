@@ -63,11 +63,13 @@ class ProductImportService
                     $name = trim($cells[2] ?? '');
                     $hargaBeli = floatval(str_replace(',', '', $cells[3] ?? 0));
                     $hargaJual = floatval(str_replace(',', '', $cells[4] ?? 0));
-                    $stok = (int) ($cells[5] ?? 0);
-                    $minStok = (int) ($cells[6] ?? 5);
-                    $satuan = trim($cells[7] ?? 'pcs');
-                    $deskripsi = trim($cells[8] ?? '');
-                    $isActive = isset($cells[9]) ? (bool) $cells[9] : true;
+                    $hargaGrosir = floatval(str_replace(',', '', $cells[5] ?? 0));
+                    $minimalGrosir = (int) ($cells[6] ?? 0);
+                    $stok = (int) ($cells[7] ?? 0);
+                    $minStok = (int) ($cells[8] ?? 5);
+                    $satuan = trim($cells[9] ?? 'pcs');
+                    $deskripsi = trim($cells[10] ?? '');
+                    $isActive = isset($cells[11]) ? (bool) $cells[11] : true;
 
                     // 1. Resolve Category
                     $category = null;
@@ -99,6 +101,8 @@ class ProductImportService
                             'name' => $name,
                             'harga_beli' => $hargaBeli,
                             'harga_jual' => $hargaJual,
+                            'harga_grosir' => $hargaGrosir,
+                            'minimal_grosir' => $minimalGrosir,
                             'stok' => $stok,
                             'min_stok' => $minStok,
                             'satuan' => $satuan,
@@ -114,6 +118,8 @@ class ProductImportService
                             'name' => $name,
                             'harga_beli' => $hargaBeli,
                             'harga_jual' => $hargaJual,
+                            'harga_grosir' => $hargaGrosir,
+                            'minimal_grosir' => $minimalGrosir,
                             'stok' => $stok,
                             'min_stok' => $minStok,
                             'satuan' => $satuan,

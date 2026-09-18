@@ -111,9 +111,19 @@
                             <div class="p-4 space-y-3" wire:key="{{ $key }}">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="min-w-0">
-                                        <p class="font-medium text-slate-700 truncate">{{ $item['name'] }}</p>
-                                        <p class="text-xs text-slate-400 mt-0.5">Rp
-                                            {{ number_format($item['harga'], 0, ',', '.') }} / unit</p>
+                                        <p class="font-medium text-slate-700 truncate">{{ $item['name'] }}
+                                            @if(!empty($item['is_grosir']))
+                                                <span class="inline-flex items-center ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">Grosir</span>
+                                            @endif
+                                        </p>
+                                        <p class="text-xs text-slate-400 mt-0.5">
+                                            @if(!empty($item['is_grosir']))
+                                                <span class="line-through text-slate-300">Rp {{ number_format($item['harga_jual_asli'] ?? $item['harga'], 0, ',', '.') }}</span>
+                                                <span class="text-amber-600 font-semibold">Rp {{ number_format($item['harga'], 0, ',', '.') }}</span> / unit
+                                            @else
+                                                Rp {{ number_format($item['harga'], 0, ',', '.') }} / unit
+                                            @endif
+                                        </p>
                                     </div>
                                     <button wire:click="removeItem('{{ $key }}')"
                                         class="p-1.5 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors shrink-0">
@@ -173,7 +183,11 @@
                                 <tr class="border-b border-slate-50 hover:bg-slate-50/50"
                                     wire:key="{{ $key }}">
                                     <td class="py-3 px-4">
-                                        <p class="font-medium text-slate-700">{{ $item['name'] }}</p>
+                                        <p class="font-medium text-slate-700">{{ $item['name'] }}
+                                            @if(!empty($item['is_grosir']))
+                                                <span class="inline-flex items-center ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700 uppercase">Grosir</span>
+                                            @endif
+                                        </p>
                                     </td>
                                     <td class="py-3 px-4 text-center">
                                         <input type="number"
@@ -181,8 +195,14 @@
                                             value="{{ $item['qty'] }}" min="1" max="{{ $item['stok'] }}"
                                             class="w-16 text-center rounded-lg border border-slate-200 py-1 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200">
                                     </td>
-                                    <td class="py-3 px-4 text-right text-slate-600">Rp
-                                        {{ number_format($item['harga'], 0, ',', '.') }}</td>
+                                    <td class="py-3 px-4 text-right">
+                                        @if(!empty($item['is_grosir']))
+                                            <span class="text-xs line-through text-slate-300 block">Rp {{ number_format($item['harga_jual_asli'] ?? $item['harga'], 0, ',', '.') }}</span>
+                                            <span class="text-amber-700 font-semibold">Rp {{ number_format($item['harga'], 0, ',', '.') }}</span>
+                                        @else
+                                            <span class="text-slate-600">Rp {{ number_format($item['harga'], 0, ',', '.') }}</span>
+                                        @endif
+                                    </td>
                                     <td class="py-3 px-4 text-right font-semibold text-slate-800">Rp
                                         {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
                                     <td class="py-3 px-2">

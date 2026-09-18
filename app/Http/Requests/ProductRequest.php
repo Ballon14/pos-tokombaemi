@@ -21,6 +21,8 @@ class ProductRequest extends FormRequest
             'sku' => 'nullable|string|max:50|unique:products,sku,'.$id,
             'harga_beli' => 'required|numeric|min:0',
             'harga_jual' => 'required|numeric|min:0',
+            'harga_grosir' => 'nullable|numeric|min:0',
+            'minimal_grosir' => 'nullable|integer|min:0',
             'stok' => $this->isMethod('post') ? 'required|integer|min:0' : 'prohibited',
             'min_stok' => 'required|integer|min:0',
             'satuan' => 'required|string|max:20',

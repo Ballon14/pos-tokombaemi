@@ -14,6 +14,8 @@ class Product extends Model
         'sku',
         'harga_beli',
         'harga_jual',
+        'harga_grosir',
+        'minimal_grosir',
         'stok',
         'min_stok',
         'satuan',
@@ -25,6 +27,8 @@ class Product extends Model
     protected $casts = [
         'harga_beli' => 'decimal:2',
         'harga_jual' => 'decimal:2',
+        'harga_grosir' => 'decimal:2',
+        'minimal_grosir' => 'integer',
         'stok' => 'integer',
         'min_stok' => 'integer',
         'is_active' => 'boolean',

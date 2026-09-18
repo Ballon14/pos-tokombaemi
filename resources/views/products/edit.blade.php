@@ -36,6 +36,25 @@
                     <label class="block text-sm font-medium text-slate-700 mb-1">Harga Jual</label>
                     <input type="number" name="harga_jual" value="{{ old('harga_jual', $product->harga_jual) }}" min="0" class="w-full rounded-xl border-slate-200 text-sm" required>
                 </div>
+                <div class="md:col-span-2 border-t border-dashed border-slate-200 pt-4 mt-1">
+                    <p class="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-3">
+                        <svg class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        Pengaturan Harga Grosir (Opsional)
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Harga Grosir</label>
+                            <input type="number" name="harga_grosir" value="{{ old('harga_grosir', $product->harga_grosir) }}" min="0" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200">
+                            @error('harga_grosir') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Minimal Beli Grosir</label>
+                            <input type="number" name="minimal_grosir" value="{{ old('minimal_grosir', $product->minimal_grosir) }}" min="0" class="w-full rounded-xl border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200">
+                            @error('minimal_grosir') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1.5">Jika minimal beli grosir diisi 0, harga grosir tidak aktif. Harga grosir otomatis berlaku saat kasir memasukkan qty ≥ minimal beli.</p>
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Stok Saat Ini</label>
                     <div class="w-full rounded-xl bg-slate-50 border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700">
