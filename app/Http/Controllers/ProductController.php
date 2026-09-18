@@ -111,7 +111,7 @@ class ProductController extends Controller
         }
     }
 
-    public function downloadTemplate()
+    public function downloadTemplate(\Illuminate\Http\Request $request)
     {
         $headers = [
             'Kategori (Wajib)',
@@ -127,26 +127,54 @@ class ProductController extends Controller
             'Aktif (1/0)'
         ];
 
+        $categoryName = 'Makanan';
+        if ($request->has('category_id') && $request->category_id != '') {
+            $cat = \App\Models\Category::find($request->category_id);
+            if ($cat) {
+                $categoryName = $cat->name;
+            }
+        }
+
+        $writer = \OpenSpout\Writer\Common\Creator\WriterEntityFactory::createCSVWriter();
+        $fileName = 'template_import_produk_' . strtolower(preg_replace('/[^a-zA-Z0-9]+/', '_', $categoryName)) . '.csv';
+        
+        $writer->openToBrowser($fileName);
+        $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($headers));
+        
+        // Provide 1 sample row with formatting
         $exampleRow = [
-            'Makanan',
-            'MKN-001',
-            'Indomie Goreng',
+            $categoryName,
+            '',
+            'Contoh Produk 1',
             '2500',
             '3000',
             '[{"minimal_grosir":10,"harga_grosir":2900},{"minimal_grosir":40,"harga_grosir":2800}]',
             '100',
             '10',
             'pcs',
-            'Indomie goreng ori',
+            'Deskripsi singkat',
             '1'
         ];
-
-        $writer = \OpenSpout\Writer\Common\Creator\WriterEntityFactory::createCSVWriter();
-        $fileName = 'template_import_produk.csv';
-        
-        $writer->openToBrowser($fileName);
-        $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($headers));
         $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($exampleRow));
+        
+        // Provide 5 empty rows pre-filled with the category
+        for ($i = 0; $i < 5; $i++) {
+            $emptyRow = [
+                $categoryName,
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '1'
+            ];
+            $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($emptyRow));
+        }
+        
         $writer->close();
         exit;
     }

@@ -193,12 +193,26 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-slate-700 mb-1">File Excel/CSV</label>
                     <input type="file" name="file" accept=".xlsx,.csv" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors">
-                    <div class="mt-3 text-xs text-slate-500 flex flex-col gap-1">
-                        <p>Pastikan format file sesuai dengan template.</p>
-                        <a href="{{ route('products.import-template') }}" class="text-indigo-600 hover:text-indigo-700 font-medium inline-flex items-center gap-1 w-max">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                            Unduh Template CSV
-                        </a>
+                    
+                    <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-100" x-data="{
+                        selectedCat: '',
+                        get downloadUrl() {
+                            return '{{ route('products.import-template') }}' + (this.selectedCat ? '?category_id=' + this.selectedCat : '');
+                        }
+                    }">
+                        <label class="block text-xs font-semibold text-slate-700 mb-2">Unduh Template Berdasarkan Kategori</label>
+                        <div class="flex gap-2">
+                            <select x-model="selectedCat" class="flex-1 rounded-lg border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-200">
+                                <option value="">Pilih Kategori...</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                            <a :href="downloadUrl" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 transition-colors flex items-center justify-center shrink-0" title="Unduh Template">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            </a>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">Template akan disesuaikan dengan kategori yang Anda pilih (Kategori terisi otomatis di beberapa baris awal).</p>
                     </div>
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
