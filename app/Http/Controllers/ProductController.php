@@ -115,7 +115,7 @@ class ProductController extends Controller
     {
         $headers = [
             'Kategori (Wajib)',
-            'SKU',
+            'SKU (Kosongkan untuk otomatis)',
             'Nama Produk',
             'Harga Beli',
             'Harga Jual',
@@ -135,11 +135,12 @@ class ProductController extends Controller
             }
         }
 
-        $writer = \OpenSpout\Writer\Common\Creator\WriterEntityFactory::createCSVWriter();
+        $options = new \OpenSpout\Writer\CSV\Options();
+        $writer = new \OpenSpout\Writer\CSV\Writer($options);
         $fileName = 'template_import_produk_' . strtolower(preg_replace('/[^a-zA-Z0-9]+/', '_', $categoryName)) . '.csv';
         
         $writer->openToBrowser($fileName);
-        $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($headers));
+        $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues($headers));
         
         // Provide 1 sample row with formatting
         $exampleRow = [
@@ -155,7 +156,7 @@ class ProductController extends Controller
             'Deskripsi singkat',
             '1'
         ];
-        $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($exampleRow));
+        $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues($exampleRow));
         
         // Provide 5 empty rows pre-filled with the category
         for ($i = 0; $i < 5; $i++) {
@@ -172,7 +173,7 @@ class ProductController extends Controller
                 '',
                 '1'
             ];
-            $writer->addRow(\OpenSpout\Writer\Common\Creator\WriterEntityFactory::createRowFromArray($emptyRow));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues($emptyRow));
         }
         
         $writer->close();
